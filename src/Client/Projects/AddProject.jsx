@@ -10,6 +10,9 @@ export default function AddProject() {
   const [Budget, setBudget] = useState("")
   const [Deadline, setDeadline] = useState("")
   const[categoryId,setCategoryId]=useState("")
+  const[clientId,setClientId]=useState("")
+
+  
 
   
 
@@ -47,7 +50,8 @@ export default function AddProject() {
         pdescription: PDescription,
         budget: Budget,
         deadline: Deadline,
-        categoryId:categoryId
+        categoryId:categoryId,
+        clientId:
 
       }
 

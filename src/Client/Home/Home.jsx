@@ -21,7 +21,7 @@ export default function Home() {
                   <h1 style={{ color: 'black' }} className="display-1 mb-3 animated slideInDown">
                     Tired of Your 9-5 Job? 
                   </h1>
-                    <h1 style={{ color: 'black' }} className="display-1  mb-3 animated slideInDown">
+                    <h1 style={{ color: 'black'  }} className="display-1  mb-3 animated slideInDown">
                     Get your freedom here
                   </h1> 
                   <Link to="/skills" className="btn btn-primary py-sm-3 px-sm-4">
