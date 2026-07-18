@@ -8,7 +8,7 @@ export default function Home() {
   <div className="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
     <div
       id="header-carousel"
-      className="carousel slide"
+      className="carousel slide " 
       data-bs-ride="carousel"
     >
       <div className="carousel-inner">
