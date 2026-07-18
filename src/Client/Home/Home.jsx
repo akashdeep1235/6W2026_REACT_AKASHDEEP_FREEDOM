@@ -9,13 +9,13 @@ export default function Home() {
     <div
       id="header-carousel"
       className="carousel slide " 
-      data-bs-ride="carousel"
+      data-bs-ride="carousel "
     >
       <div className="carousel-inner">
         <div className="carousel-item active">
           <img className="w-100 h-100" src="https://media.istockphoto.com/id/1352603244/photo/shot-of-an-unrecognizable-businessman-working-on-his-laptop-in-the-office.jpg?s=612x612&w=0&k=20&c=upiDYeAZEsxbUBdhX35MXm79drIXA-5Q-FcfmZk71lM=" alt="Image"  style={{ objectFit: "cover" }} />
           <div className="carousel-caption bg-transparent">
-            <div className="container">
+            <div className="container ">
               <div className="row justify-content-center">
                 <div className="col-lg-8">
                   <h1 style={{ color: 'black' }} className="display-1 mb-3 animated slideInDown">
