@@ -8,7 +8,7 @@ import AuthService from "../../Services/AuthService";
 export default function AddProject() {
 
   const [ProjectTitle, setProjectTitle] = useState("")
-  const [PDescription, setPDescription] = useState("")
+  const [Description, setDescription] = useState("")
   const [Budget, setBudget] = useState("")
   const [Deadline, setDeadline] = useState("")
   const[categoryId,setCategoryId]=useState("")
@@ -54,7 +54,7 @@ export default function AddProject() {
     
       let payload = {
         title: ProjectTitle,
-        pdescription: PDescription,
+        description: Description,
         budget: Budget,
         deadline: Deadline,
         categoryId:categoryId,
@@ -120,7 +120,7 @@ export default function AddProject() {
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Description"
-              onChange={(e) => { setPDescription(e.target.value) }}
+              onChange={(e) => { setDescription(e.target.value) }}
 
 
             />

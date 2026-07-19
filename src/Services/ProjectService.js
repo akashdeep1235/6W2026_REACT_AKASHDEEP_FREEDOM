@@ -7,7 +7,7 @@ import { db } from "../Firebase/FirebaseConfig";
         let newProject= new ProjectModel()
         newProject.categoryId = data.categoryId;
         newProject.title=data.title
-        newProject.pdescription=data.pdescription
+        newProject.description=data.description
         newProject.budget=data.budget
         newProject.deadline=data.deadline
      newProject.clientId = data.clientId
