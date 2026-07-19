@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify"
 import SkillService from "../../Services/SkillService";
 import BidService from "../../Services/BidService";
+import AuthService from "../../Services/AuthService";
 import Bids from "./Bids";
 
 export default function AddBids() {
@@ -48,7 +49,8 @@ export default function AddBids() {
       let payload = {
         bidamount: bidamount,
         proposal: proposal,
-        projectId: projectId
+        projectId: projectId,
+        freelancerId:AuthService.getUid()
 
 
       }

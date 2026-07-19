@@ -50,7 +50,7 @@ class UserService {
     if (userDoc.exists()) {
       const firestoreData = userDoc.data()
       const authData = {
-        id: user.uid,
+        uid: user.uid,
         name: firestoreData.name,
         email: user.email,
         password:user.password,

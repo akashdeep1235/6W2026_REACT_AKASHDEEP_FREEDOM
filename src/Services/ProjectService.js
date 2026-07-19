@@ -10,6 +10,7 @@ import { db } from "../Firebase/FirebaseConfig";
         newProject.pdescription=data.pdescription
         newProject.budget=data.budget
         newProject.deadline=data.deadline
+     newProject.clientId = data.clientId
 
    
        const docRef = await addDoc(collection(db, "projects"), { ...newProject});

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Contact() {
     return (
-        <>  
+      
         <>
   {/* Page Header Start */}
   <div
@@ -122,6 +122,6 @@ export default function Contact() {
   {/* Contact End */}
 </>
 
-        </>
+       
     );
 }

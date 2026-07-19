@@ -3,6 +3,7 @@ import ProjectService from "../../Services/ProjectService";
 import BidService from "../../Services/BidService"
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
+import UserService from "../../Services/UserService";
 
 const override = {
   display: "block",
@@ -11,9 +12,11 @@ const override = {
 };
 export default function ManageBids() {
   const [loading, setLoading] = useState(false);
+   const [users,setUsers]=useState([])
   const [bids, setBids] = useState([])
 
   const [projects, setProjects] = useState([])
+
 
   async function getBids() {
     try {
@@ -44,12 +47,26 @@ export default function ManageBids() {
       setLoading(false)
     }
   }
-
+ async function getUsers() {
+    try {
+      setLoading(true)
+      const data = await UserService.all();
+      console.log(data);
+      setUsers(data);
+    }
+    catch (err) {
+      console.log(err)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
 
   useEffect(() => {
     getProjects()
     getBids()
+    getUsers()
   }, [])
 
 
@@ -110,7 +127,10 @@ export default function ManageBids() {
                 <th scope="col ">Sr.no</th>
 
 
-                <th scope="col">Title</th>
+                <th scope="col">Project</th>
+                <th scope="col">Freelancer</th>
+
+
                 <th scope="col">Bid Amount</th>
                 <th>Proposal</th>
 
@@ -129,6 +149,12 @@ export default function ManageBids() {
                   <td>
                     {projects.find((p) => p.id === bid.projectId)?.title || "Project Not Found"}
                   </td>
+                      <td>
+                        {
+                      users.find((t)=> t.uid==bid.freelancerId)?.name}
+                  </td>
+                  
+
 
 
 

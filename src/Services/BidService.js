@@ -8,7 +8,10 @@ import BidModel from "../Models/BidModel";
         let newBid= new BidModel()
         newBid.projectId = data.projectId;
         newBid.bidamount= data.bidamount;
-        newBid.proposal=data.proposal
+        newBid.proposal=data.proposal;
+        newBid.freelancerId=data.freelancerId;
+
+
 
       
 

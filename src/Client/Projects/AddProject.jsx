@@ -3,6 +3,8 @@ import ProjectService from "../../Services/ProjectService";
 import { useState,useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify"
 import SkillService from "../../Services/SkillService";
+import UserService from "../../Services/UserService"
+import AuthService from "../../Services/AuthService";
 export default function AddProject() {
 
   const [ProjectTitle, setProjectTitle] = useState("")
@@ -37,21 +39,26 @@ export default function AddProject() {
         setLoading(false)
       }
     }
+
+
+
         useEffect(()=>{
         getSkills()
+    
     }, [])
 
   async function addProject(e) {
     e.preventDefault()
 
     try {
+    
       let payload = {
         title: ProjectTitle,
         pdescription: PDescription,
         budget: Budget,
         deadline: Deadline,
         categoryId:categoryId,
-        clientId:
+        clientId:AuthService.getUid() 
 
       }
 

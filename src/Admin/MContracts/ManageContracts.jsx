@@ -63,7 +63,7 @@ export default function ManageContracts() {
       >
         <div className="container text-center py-5">
           <h1 className="display-3 text-white mb-4 animated slideInDown">
-            Manage bids
+            Manage contracts
           </h1>
           <nav aria-label="breadcrumb animated slideInDown">
             <ol className="breadcrumb justify-content-center mb-0">
@@ -74,7 +74,7 @@ export default function ManageContracts() {
                 <Link to="#">bids</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Manage bids
+                Manage
               </li>
             </ol>
           </nav>
@@ -124,16 +124,16 @@ export default function ManageContracts() {
               {bids.map((bid, index) => (
                 <tr >
                   <td>
-                    {index + 1}
+                    
                   </td>
                   <td>
-                    {projects.find((p) => p.id === bid.projectId)?.title || "Project Not Found"}
+                    
                   </td>
 
 
 
-                  <td>{bid.bidamount}</td>
-                  <td>{bid.proposal}</td>
+                  <td></td>
+                  <td></td>
 
 
                   {/* <td>{.projectStatus}</td>

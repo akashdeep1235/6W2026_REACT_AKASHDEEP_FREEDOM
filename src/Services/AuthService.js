@@ -4,7 +4,7 @@ import { auth } from "../Firebase/FirebaseConfig"
 class AuthService{
     async setData(res){
         localStorage.setItem("name",res.name)
-        localStorage.setItem("id",res.id)
+        localStorage.setItem("uid",res.uid)
         localStorage.setItem("email",res.email)
         localStorage.setItem("token",res.token)
         localStorage.setItem("islogin","true")
@@ -22,5 +22,8 @@ class AuthService{
         sessionStorage.clear()
         signOut(auth)
     }
+    getUid() {
+    return localStorage.getItem("uid")
+}
 }
 export default new AuthService();
