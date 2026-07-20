@@ -20,11 +20,10 @@ class UserService {
     newUser.uid = user.uid
     newUser.name = data.name
     newUser.email = data.email
-    
-
-    
     newUser.contact = data.contact
     newUser.userType = data.userType
+    newUser.address = data.address
+
 
     if (data.userType === "freelancer") {
       newUser.status = "pending";

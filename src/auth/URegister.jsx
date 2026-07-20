@@ -9,7 +9,7 @@ export default function URegister() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [contact, setContact] = useState("")
-
+  const [address, setAddress] = useState("")
   const [userType, setUserType] = useState("client")
   const nav = useNavigate();
 
@@ -23,7 +23,8 @@ export default function URegister() {
         email: email,
         password: password,
         userType: userType,
-        contact:contact
+        contact:contact,
+        address:address
       }
 
       await UserService.register(payload)
@@ -98,6 +99,14 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Contact"
               onChange={(e) => { setContact(e.target.value) }}
+
+
+            />
+                                <input
+              type="text"
+              className="w-100 form-control border-0 py-3 mb-4"
+              placeholder="Enter Addresss"
+              onChange={(e) => { setAddress(e.target.value) }}
 
 
             />
