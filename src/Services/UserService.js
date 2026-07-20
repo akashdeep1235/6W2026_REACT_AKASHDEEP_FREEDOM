@@ -23,6 +23,8 @@ class UserService {
     newUser.contact = data.contact
     newUser.userType = data.userType
     newUser.address = data.address
+    newUser.image = data.image
+
 
 
     if (data.userType === "freelancer") {
@@ -55,7 +57,8 @@ class UserService {
         password:user.password,
         userType: firestoreData.userType,
          status: firestoreData.status,
-        token: await user.getIdToken()
+        token: await user.getIdToken(),
+        image:user.image
       };
 
       await AuthService.setData(authData);

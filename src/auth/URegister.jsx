@@ -3,6 +3,8 @@ import UserService from "../Services/UserService";
 import { ToastContainer } from "react-toastify"
 import { useState } from "react";
 import { toast } from "react-toastify"
+import CloudinaryService from "../Services/CloudinaryService";
+import axios from 'axios'
 export default function URegister() {
 
   const [name, setName] = useState("")
@@ -11,6 +13,7 @@ export default function URegister() {
   const [contact, setContact] = useState("")
   const [address, setAddress] = useState("")
   const [userType, setUserType] = useState("client")
+  const [image, setImage] = useState('');
   const nav = useNavigate();
 
 
@@ -18,13 +21,17 @@ export default function URegister() {
     e.preventDefault()
 
     try {
+      let imageUrl = ""
+      if (image) {
+        imageUrl = await CloudinaryService.upload(image)
+      }
       let payload = {
         name: name,
         email: email,
         password: password,
         userType: userType,
-        contact:contact,
-        address:address
+        contact: contact,
+        address: address
       }
 
       await UserService.register(payload)
@@ -71,6 +78,15 @@ export default function URegister() {
           <form onSubmit={register} className="">
 
 
+
+             <input
+                            type="file"
+                            className="w-100 form-control border-0 py-3 mb-4"
+                            placeholder="Insert your picture"
+                            onChange={(e) => { setImage(e.target.files[0]) }}
+                        />
+
+
             <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
@@ -94,7 +110,7 @@ export default function URegister() {
 
 
             />
-                        <input
+            <input
               type="number"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Contact"
@@ -102,7 +118,7 @@ export default function URegister() {
 
 
             />
-                                <input
+            <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Addresss"
@@ -110,17 +126,17 @@ export default function URegister() {
 
 
             />
-          
-          
+
+
 
             <div className="mb-4">
               <select
                 className="form-control py-3"
-                
+
                 value={userType}
                 onChange={(e) => { setUserType(e.target.value) }}
               >
-              
+
                 <option value="client">Client</option>
 
                 <option value="freelancer">Freelancer</option>

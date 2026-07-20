@@ -9,7 +9,10 @@ class AuthService{
         localStorage.setItem("token",res.token)
         localStorage.setItem("islogin","true")
         localStorage.setItem("userType", res.userType)
-        localStorage.setItem("userType",res.address)
+        localStorage.setItem("address",res.address)
+        localStorage.setItem("image",res.image)
+
+
 
     }
     getEmail(){
