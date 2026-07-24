@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../Services/UserService";
 import { ToastContainer } from "react-toastify"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify"
 import CloudinaryService from "../Services/CloudinaryService";
+import SkillService from "../Services/SkillService";
 import axios from 'axios'
 export default function URegister() {
 
@@ -14,6 +15,11 @@ export default function URegister() {
   const [address, setAddress] = useState("")
   const [userType, setUserType] = useState("client")
   const [image, setImage] = useState('');
+  const [skills, setSkills] = useState('');
+  const [skillList, setSkillList] = useState([]);
+
+
+
   const nav = useNavigate();
 
 
@@ -31,7 +37,10 @@ export default function URegister() {
         password: password,
         userType: userType,
         contact: contact,
-        address: address
+        address: address,
+        image:imageUrl,
+        skills: userType === "freelancer" ? skills : "",
+
       }
 
       await UserService.register(payload)
@@ -46,6 +55,15 @@ export default function URegister() {
 
 
   }
+  useEffect(() => {
+  SkillService.all()
+    .then((res) => {
+      setSkillList(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, []);
 
   return (
     <>
@@ -144,6 +162,23 @@ export default function URegister() {
 
               </select>
             </div>
+            {userType === "freelancer" && (
+    <div className="form-group mt-3">
+        <select
+            className="form-control"
+            value={skills}
+            onChange={(e) => setSkills(e.target.value)}
+        >
+            <option value="">Select Skill</option>
+
+            {skillList.map((item) => (
+                <option key={item.id} value={item.id}>
+                    {item.name}
+                </option>
+            ))}
+        </select>
+    </div>
+)}
 
             <button
               className="w-100 btn form-control border-secondary py-3 bg-white text-primary "
