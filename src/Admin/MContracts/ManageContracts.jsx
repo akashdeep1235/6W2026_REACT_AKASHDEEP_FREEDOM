@@ -84,7 +84,7 @@ export default function ManageContracts() {
 
       <div className="container mb-5">
         <div className="d-flex justify-content-between mt-5">
-          <h1 className="text-center">Bids List</h1>
+          <h1 className="text-center">Contract List</h1>
 
 
         </div>
@@ -110,39 +110,27 @@ export default function ManageContracts() {
                 <th scope="col ">Sr.no</th>
 
 
-                <th scope="col">Title</th>
-                <th scope="col">Bid Amount</th>
-                <th>Proposal</th>
+                <th scope="col">Project</th>
+                <th scope="col">Client</th>
+                <th>Freelancer</th>
 
 
-                <th scope="col">Status</th>
-                <th scope="col">Createdat</th>
+
+                <th scope="col">Work Url</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Contract Status</th>
+
+                
+
+                <th scope="col">Created at</th>
+                <th scope="col">Updated at</th>
+
+
 
               </tr>
             </thead>
             <tbody>
-              {bids.map((bid, index) => (
-                <tr >
-                  <td>
-                    
-                  </td>
-                  <td>
-                    
-                  </td>
-
-
-
-                  <td></td>
-                  <td></td>
-
-
-                  {/* <td>{.projectStatus}</td>
-                  <td>
-                    {new Date(project.createdAt).toLocaleDateString()}
-                  </td> */}
-
-                </tr>
-              ))}
+            
             </tbody>
           </table>
         </div>

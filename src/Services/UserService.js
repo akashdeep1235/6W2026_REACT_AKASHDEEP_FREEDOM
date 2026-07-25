@@ -23,7 +23,8 @@ class UserService {
     newUser.contact = data.contact
     newUser.userType = data.userType
     newUser.address = data.address
-    newUser.image = data.image
+    newUser.profileImage = data.profileImage
+    newUser.skills=data.skills
 
 
 

@@ -14,7 +14,7 @@ export default function URegister() {
   const [contact, setContact] = useState("")
   const [address, setAddress] = useState("")
   const [userType, setUserType] = useState("client")
-  const [image, setImage] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [skills, setSkills] = useState('');
   const [skillList, setSkillList] = useState([]);
 
@@ -28,8 +28,8 @@ export default function URegister() {
 
     try {
       let imageUrl = ""
-      if (image) {
-        imageUrl = await CloudinaryService.upload(image)
+      if (profileImage) {
+        imageUrl = await CloudinaryService.upload(profileImage)
       }
       let payload = {
         name: name,
@@ -38,7 +38,7 @@ export default function URegister() {
         userType: userType,
         contact: contact,
         address: address,
-        image:imageUrl,
+        profileImage:imageUrl,
         skills: userType === "freelancer" ? skills : "",
 
       }
@@ -101,7 +101,7 @@ export default function URegister() {
                             type="file"
                             className="w-100 form-control border-0 py-3 mb-4"
                             placeholder="Insert your picture"
-                            onChange={(e) => { setImage(e.target.files[0]) }}
+                            onChange={(e) => { setProfileImage(e.target.files[0]) }}
                         />
 
 
