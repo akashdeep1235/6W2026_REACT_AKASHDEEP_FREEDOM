@@ -57,8 +57,8 @@ export default function Projects(){
         data-wow-delay="0.1s"
         style={{ maxWidth: 500 }}
       >
-        <p className="fs-5 fw-bold text-primary">Our Projects</p>
-        <h1 className="display-5 mb-5">Some Of Our Wonderful Projects</h1>
+        <p className="fs-5 fw-bold text-primary">Your Projects</p>
+        <h1 className="display-5 mb-5">No Projects yet</h1>
       </div>
       <div className="row wow fadeInUp" data-wow-delay="0.3s">
         <div className="col-12 text-center">

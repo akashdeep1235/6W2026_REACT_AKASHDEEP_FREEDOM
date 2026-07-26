@@ -7,7 +7,8 @@ export default class ProjectModel {
   budget="";
   deadline="";
 
-  projectStatus="Open/In Progress/Completed/Cancelled";
+  projectStatus="Open";   
+  // /In Progress/Completed/Cancelled
 
   selectedFreelancerId="";
 

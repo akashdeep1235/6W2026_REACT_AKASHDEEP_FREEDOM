@@ -7,5 +7,5 @@ export default class BidModel{
 
   bidStatus="Pending";
 
-  createdAt=""
+  createdAt=Date.now();
 }

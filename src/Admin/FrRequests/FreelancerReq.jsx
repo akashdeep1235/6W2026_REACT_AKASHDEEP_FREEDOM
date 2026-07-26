@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
 import UserService from "../../Services/UserService";
 import { toast } from "react-toastify";
+import SkillService from "../../Services/SkillService";
 const override = {
   display: "block",
   margin: "0 auto",
@@ -52,12 +53,19 @@ async function rejectUser(id) {
     toast.error("Reject failed");
   }
 }
+const [skills, setSkills] = useState([]);
+
+async function getSkills() {
+  const data = await SkillService.all();
+  setSkills(data);
+}
 
 
   
   useEffect(() => {
    
     getUsers()
+      getSkills();
   }, [])
 
 
@@ -139,7 +147,7 @@ async function rejectUser(id) {
       <td>{user.name}</td>
       <td>{user.email}</td>
       <td>{user.contact}</td>
-      <td>{user.skills || "-"}</td>
+      <td> {skills.find((s) => s.id === user.skills)?.name }</td>
       <td>{user.status}</td>
       
       <td>

@@ -133,7 +133,7 @@ export default function Bids() {
 
 
                   <td>{project.title}</td>
-                  <td>{project.pdescription}</td>
+                  <td>{project.description}</td>
 
                   <td>₹ {project.budget}</td>
                   <td>{project.deadline}</td>

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
 import UserService from "../../Services/UserService";
 
+
 const override = {
   display: "block",
   margin: "0 auto",
@@ -12,7 +13,7 @@ const override = {
 };
 export default function ManageBids() {
   const [loading, setLoading] = useState(false);
-   const [users,setUsers]=useState([])
+  const [users, setUsers] = useState([])
   const [bids, setBids] = useState([])
 
   const [projects, setProjects] = useState([])
@@ -47,7 +48,7 @@ export default function ManageBids() {
       setLoading(false)
     }
   }
- async function getUsers() {
+  async function getUsers() {
     try {
       setLoading(true)
       const data = await UserService.all();
@@ -59,6 +60,31 @@ export default function ManageBids() {
     }
     finally {
       setLoading(false)
+    }
+  }
+  async function hireFreelancer(bid) {
+    try {
+      setLoading(true);
+
+      // Accept selected bid and reject other bids
+      await BidService.hireFreelancer(bid);
+
+      // Update the project
+      await ProjectService.updateProjectStatus(
+        bid.projectId,
+        bid.freelancerId
+      );
+
+      alert("Freelancer hired successfully.");
+
+      // Reload data
+      getBids();
+      getProjects();
+
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -133,6 +159,9 @@ export default function ManageBids() {
 
                 <th scope="col">Bid Amount</th>
                 <th>Proposal</th>
+                <th>Action</th>
+
+
 
 
                 <th scope="col">Status</th>
@@ -141,34 +170,50 @@ export default function ManageBids() {
               </tr>
             </thead>
             <tbody>
-              {bids.map((bid, index) => (
-                <tr >
-                  <td>
-                    {index + 1}
-                  </td>
-                  <td>
-                    {projects.find((p) => p.id === bid.projectId)?.title || "Project Not Found"}
-                  </td>
-                      <td>
-                        {
-                      users.find((t)=> t.uid==bid.freelancerId)?.name}
-                  </td>
-                  
+              {bids
+                .filter((bid) => {
+                  const project = projects.find((p) => p.id === bid.projectId);
+                  return project && project.projectStatus === "Open";
+                })
+                .map((bid, index) => (
+                  <tr >
+                    <td>
+                      {index + 1}
+                    </td>
+                    <td>
+                      {projects.find((p) => p.id === bid.projectId)?.title || "Project Not Found"}
+                    </td>
+                    <td>
+                      {
+                        users.find((t) => t.uid == bid.freelancerId)?.name}
+                    </td>
 
 
 
 
-                  <td>{bid.bidamount}</td>
-                  <td>{bid.proposal}</td>
+
+                    <td>{bid.bidamount}</td>
+                    <td>{bid.proposal}</td>
+                    <td>
+                      {bid.bidStatus === "Pending" && (
+                        <button
+                          className="btn btn-success btn-sm"
+                          onClick={() => hireFreelancer(bid)}
+                        >
+                          Hire
+                        </button>
+                      )}
+                    </td>
 
 
-                  <td>{bid.bidStatus}</td>
-                  <td>
-                    {new Date(bid.createdAt).toLocaleDateString()}
-                  </td> 
 
-                </tr>
-              ))}
+                    <td>{bid.bidStatus}</td>
+                    <td>
+                      {new Date(bid.createdAt).toLocaleDateString()}
+                    </td>
+
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

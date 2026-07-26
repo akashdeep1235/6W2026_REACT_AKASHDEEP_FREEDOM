@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import ProjectModel from "../Models/ProjectModel"
 import { db } from "../Firebase/FirebaseConfig";
  class ProjectService{
@@ -27,5 +27,14 @@ import { db } from "../Firebase/FirebaseConfig";
       });
       return projects
 
-}}
+}
+ async updateProjectStatus(projectId, freelancerId) {
+    await updateDoc(doc(db, "projects", projectId), {
+      projectStatus: "In Progress",
+      selectedFreelancerId: freelancerId,
+    });
+  }
+}
+
+
 export default new ProjectService()
