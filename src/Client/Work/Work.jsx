@@ -1,7 +1,59 @@
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom"
+import ProjectService from "../../Services/ProjectService";
+import SkillService from "../../Services/SkillService"
+import { useState, useEffect } from "react";
+import { RingLoader } from "react-spinners";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 export default function Work() {
+    const [loading, setLoading] = useState(false);
+    const [skills, setSkills] = useState([])
+    
+    const [projects, setProjects] = useState([])
+  
+    async function getSkills() {
+      try {
+        setLoading(true)
+        let res = await SkillService.all()
+        console.log("Cate", res)
+        setSkills(res)
+      } catch (err) {
+        console.log(err)
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+  
+  
+    async function getProjects() {
+      try {
+        setLoading(true)
+        const data = await ProjectService.all();
+        console.log(data);
+        setProjects(data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+  
+  
+  
+    useEffect(() => {
+      getProjects()
+      getSkills()
+    }, [])
+  
+
   async function handlePay(){
     var options = {
     "key": "rzp_test_TCTIa3OFOZcik7", // Enter the Key ID generated from the Dashboard
@@ -71,6 +123,75 @@ rzp1.on('payment.failed', function (response) {
     </div>
   </div>
   {/* Page Header End */}
+
+   {loading ?
+          <RingLoader
+            color="#81C408"
+            loading={loading}
+            cssOverride={override}
+            size={75}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+  
+  
+          : <div className="table-responsive m-5 ">
+            <table className="table border ">
+              <thead>
+                <tr>
+                  <th scope="col ">Sr.no</th>
+                  <th scope="col ">Skill</th>
+  
+                  <th scope="col">Title</th>
+                  <th scope="col">Description</th>
+                  <th>Budget</th>
+                  <th>Deadline</th>
+                  <th>Action</th>
+  
+  
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((project, index) => (
+                  <tr >
+                    <td>
+                      {index + 1}
+                    </td>
+                    <td>
+                      {
+  
+  
+                        skills.find((c) => c.id == project.categoryId)?.name
+  
+                      }
+                    </td>
+  
+  
+                    <td>{project.title}</td>
+                    <td>{project.description}</td>
+  
+                    <td>₹ {project.budget}</td>
+                    <td>{project.deadline}</td>
+                    <td>
+                      <Link to={`/freelancer/bids/addbids/${project.id}`}>
+                        <button>  Add Bids</button>
+                      </Link>
+                      &nbsp;
+                      <button onClick={() => { deleteskill(skill.id) }} className="btn btn-md rounded-circle bg-light border ">
+                        <i className="bi bi-trash text-danger" />
+                      </button>
+  
+  
+                    </td>
+  
+  
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        }
+  
         <div className="text-center">
             <button
               className="btn border-secondary py-3 bg-white text-primary "
