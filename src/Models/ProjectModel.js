@@ -5,6 +5,7 @@ export default class ProjectModel {
   title="";
   description="";
   budget="";
+   finalAmount = "";
   deadline="";
 
   projectStatus="Open";   

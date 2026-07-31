@@ -133,7 +133,7 @@ export default function ManageProjects() {
 
                 <th scope="col ">Skill</th>
 
-                <th scope="col">Title</th>
+                <th scope="col">Project</th>
                 <th scope="col">Description</th>
                 <th>Budget</th>
                 <th>Deadline</th>
@@ -167,7 +167,7 @@ export default function ManageProjects() {
 
 
                   <td>{project.title}</td>
-                  <td>{project.pdescription}</td>
+                  <td>{project.description}</td>
 
                   <td>₹ {project.budget}</td>
                   <td>{project.deadline}</td>

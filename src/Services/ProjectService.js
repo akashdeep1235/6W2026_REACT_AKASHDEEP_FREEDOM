@@ -28,10 +28,12 @@ import { db } from "../Firebase/FirebaseConfig";
       return projects
 
 }
- async updateProjectStatus(projectId, freelancerId) {
+ async updateProjectStatus(projectId, freelancerId,bidAmount) {
     await updateDoc(doc(db, "projects", projectId), {
       projectStatus: "In Progress",
       selectedFreelancerId: freelancerId,
+      finalAmount:bidAmount,
+      updatedAt:Date.now()
     });
   }
 }

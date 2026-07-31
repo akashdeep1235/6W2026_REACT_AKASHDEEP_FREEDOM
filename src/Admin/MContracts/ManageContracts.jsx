@@ -3,6 +3,7 @@ import ProjectService from "../../Services/ProjectService";
 import BidService from "../../Services/BidService"
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
+import ContractService from "../../Services/ContractService";
 
 const override = {
   display: "block",
@@ -11,31 +12,17 @@ const override = {
 };
 export default function ManageContracts() {
   const [loading, setLoading] = useState(false);
-  const [bids, setBids] = useState([])
+  const[Contracts,setContracts]=useState([]);
 
-  const [projects, setProjects] = useState([])
 
-  async function getBids() {
+
+
+  async function getContracts() {
     try {
       setLoading(true)
-      let res = await BidService.all()
-      console.log("Cate", res)
-      setBids(res)
-    } catch (err) {
-      console.log(err)
-    }
-    finally {
-      setLoading(false)
-    }
-  }
-
-
-  async function getProjects() {
-    try {
-      setLoading(true)
-      const data = await ProjectService.all();
+      const data = await ContractService.all();
       console.log(data);
-      setProjects(data);
+      setContracts(data);
     }
     catch (err) {
       console.log(err)
@@ -48,8 +35,8 @@ export default function ManageContracts() {
 
 
   useEffect(() => {
-    getProjects()
-    getBids()
+    getContracts()
+   
   }, [])
 
 
@@ -129,9 +116,33 @@ export default function ManageContracts() {
 
               </tr>
             </thead>
-            <tbody>
             
+              <tbody>
+              {Contracts.map((contract, index) => (
+                <tr >
+                  <td>
+                    {index + 1}
+                  </td>
+
+                  <td>
+                  {contract.clientId}
+                  </td>
+                  <td>
+                     {contract.clientId}
+                  </td>
+
+
+                  <td> {contract.clientId}</td>
+                  <td> {contract.clientId}</td>
+
+                  <td> {contract.clientId}</td>
+                
+
+                </tr>
+              ))}
             </tbody>
+            
+            
           </table>
         </div>
       }

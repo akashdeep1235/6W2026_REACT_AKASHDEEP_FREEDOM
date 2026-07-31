@@ -140,13 +140,20 @@ rzp1.on('payment.failed', function (response) {
               <thead>
                 <tr>
                   <th scope="col ">Sr.no</th>
-                  <th scope="col ">Skill</th>
+                  <th scope="col ">Project</th>
   
-                  <th scope="col">Title</th>
-                  <th scope="col">Description</th>
-                  <th>Budget</th>
+                  <th scope="col"> Freelancer</th>
+                  <th scope="col">Final Amount</th>
                   <th>Deadline</th>
-                  <th>Action</th>
+                  <th>Contract status</th>
+                  <th>Payment status</th>
+                  <th>Action </th>
+
+                  
+
+
+                  
+                  
   
   
                 </tr>
@@ -157,32 +164,18 @@ rzp1.on('payment.failed', function (response) {
                     <td>
                       {index + 1}
                     </td>
-                    <td>
-                      {
-  
-  
-                        skills.find((c) => c.id == project.categoryId)?.name
-  
-                      }
-                    </td>
+                 
   
   
                     <td>{project.title}</td>
-                    <td>{project.description}</td>
+                    <td></td>
+
+                    
+                   
   
                     <td>₹ {project.budget}</td>
                     <td>{project.deadline}</td>
-                    <td>
-                      <Link to={`/freelancer/bids/addbids/${project.id}`}>
-                        <button>  Add Bids</button>
-                      </Link>
-                      &nbsp;
-                      <button onClick={() => { deleteskill(skill.id) }} className="btn btn-md rounded-circle bg-light border ">
-                        <i className="bi bi-trash text-danger" />
-                      </button>
-  
-  
-                    </td>
+                    
   
   
                   </tr>

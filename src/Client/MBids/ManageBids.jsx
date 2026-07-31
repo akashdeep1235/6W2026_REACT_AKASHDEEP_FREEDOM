@@ -4,7 +4,8 @@ import BidService from "../../Services/BidService"
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
 import UserService from "../../Services/UserService";
-
+import ContractService from "../../Services/ContractService";
+import { toast } from "react-toastify";
 
 const override = {
   display: "block",
@@ -72,10 +73,24 @@ export default function ManageBids() {
       // Update the project
       await ProjectService.updateProjectStatus(
         bid.projectId,
-        bid.freelancerId
+        bid.freelancerId,
+        bid.bidamount
       );
 
-      alert("Freelancer hired successfully.");
+      const project = projects.find((p) => p.id === bid.projectId);
+       await ContractService.add({
+      projectId: bid.projectId,
+      clientId: project.clientId,
+      freelancerId: bid.freelancerId,
+      workFileUrl: ""
+    });
+
+
+
+
+
+
+       toast.success("Freelancer hired successfully");
 
       // Reload data
       getBids();
