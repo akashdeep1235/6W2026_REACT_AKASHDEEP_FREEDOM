@@ -1,4 +1,4 @@
-export default class SkillModel {
+export default class Skillmodel {
     name="";
     description="";
     image=""

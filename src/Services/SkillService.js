@@ -1,4 +1,4 @@
-import SkillModel from "../Models/SkillModel";
+import Skillmodel from "../Models/Skillmodel";
 
 import { getDoc,addDoc, collection,doc,getDocs, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../Firebase/FirebaseConfig";
