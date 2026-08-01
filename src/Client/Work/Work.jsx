@@ -13,7 +13,7 @@ const override = {
 export default function Work() {
     const [loading, setLoading] = useState(false);
     const [skills, setSkills] = useState([])
-    
+      const[Contracts,setContracts]=useState([]);
     const [projects, setProjects] = useState([])
   
     async function getSkills() {
@@ -45,12 +45,30 @@ export default function Work() {
         setLoading(false)
       }
     }
+       async function getUsers() {
+          try {
+            setLoading(true)
+            const data = await UserService.all();
+            console.log(data);
+            setUsers(data);
+          }
+          catch (err) {
+            console.log(err)
+          }
+          finally {
+            setLoading(false)
+          }
+        }
+
+
   
   
   
     useEffect(() => {
       getProjects()
       getSkills()
+      getUsers()
+
     }, [])
   
 
@@ -159,27 +177,30 @@ rzp1.on('payment.failed', function (response) {
                 </tr>
               </thead>
               <tbody>
-                {projects.map((project, index) => (
-                  <tr >
-                    <td>
-                      {index + 1}
-                    </td>
-                 
-  
-  
-                    <td>{project.title}</td>
-                    <td></td>
+                  {Contracts.map((contract, index) => (
+                <tr >
+                  <td>
+                    {index + 1}
+                  </td>
+                     <td>
+                     {projects.find((e)=> e.id==contract.projectId)?.title}
+                  </td>
 
-                    
-                   
-  
-                    <td>₹ {project.budget}</td>
-                    <td>{project.deadline}</td>
-                    
-  
-  
-                  </tr>
-                ))}
+
+                  <td>
+                  {users.find((e)=> e.uid==contract.clientId)?.name}
+                  </td>
+               
+
+                  <td> {users.find((e)=> e.uid==contract.freelancerId)?.name}</td>
+                  <td></td>
+                  <td> {contract.paymentStatus}</td>
+
+                  <td> {contract.contractStatus}</td>
+                
+
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>

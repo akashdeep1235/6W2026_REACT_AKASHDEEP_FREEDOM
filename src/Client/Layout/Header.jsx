@@ -49,9 +49,7 @@ export default function header() {
         <Link to="/managebids" className="nav-item nav-link">
           BrowseBids
         </Link>
-        <Link to="/skills" className="nav-item nav-link">
-          BrowseSkills
-        </Link>
+       
         <Link to="/work" className="nav-item nav-link">
           Work
         </Link>
@@ -76,7 +74,13 @@ export default function header() {
           Login/Register
         </Link>
         }
+
+         <Link to="/skills" className="nav-item nav-link">
+          for cards
+        </Link>
       </div>
+
+      
       
       {/* <Link
         to="/userlogin"

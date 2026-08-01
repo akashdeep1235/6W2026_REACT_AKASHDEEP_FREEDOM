@@ -5,11 +5,11 @@ export default class ContactModel {
 
   workFileUrl= "";
 
-  paymentStatus= "Pending/Paid";
+  paymentStatus= "Pending";
 
   contractStatus= "Active/Submitted/Completed";
 
-  createdAt= "";
+  createdAt=Date.now();
   updatedAt= ""
 
 }

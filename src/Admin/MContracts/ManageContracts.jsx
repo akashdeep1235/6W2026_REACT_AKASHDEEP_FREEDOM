@@ -4,6 +4,7 @@ import BidService from "../../Services/BidService"
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
 import ContractService from "../../Services/ContractService";
+import UserService from "../../Services/UserService";
 
 const override = {
   display: "block",
@@ -13,6 +14,9 @@ const override = {
 export default function ManageContracts() {
   const [loading, setLoading] = useState(false);
   const[Contracts,setContracts]=useState([]);
+    const [users,setUsers]=useState([])
+  const [projects, setProjects] = useState([])
+  
 
 
 
@@ -31,11 +35,44 @@ export default function ManageContracts() {
       setLoading(false)
     }
   }
+   async function getProjects() {
+      try {
+        setLoading(true)
+        const data = await ProjectService.all();
+        console.log(data);
+        setProjects(data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+      async function getUsers() {
+      try {
+        setLoading(true)
+        const data = await UserService.all();
+        console.log(data);
+        setUsers(data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+  
+  
 
 
 
   useEffect(() => {
     getContracts()
+    getUsers()
+    getProjects()
+
    
   }, [])
 
@@ -123,19 +160,21 @@ export default function ManageContracts() {
                   <td>
                     {index + 1}
                   </td>
-
-                  <td>
-                  {contract.clientId}
-                  </td>
-                  <td>
-                     {contract.clientId}
+                     <td>
+                     {projects.find((e)=> e.id==contract.projectId)?.title}
                   </td>
 
 
-                  <td> {contract.clientId}</td>
-                  <td> {contract.clientId}</td>
+                  <td>
+                  {users.find((e)=> e.uid==contract.clientId)?.name}
+                  </td>
+               
 
-                  <td> {contract.clientId}</td>
+                  <td> {users.find((e)=> e.uid==contract.freelancerId)?.name}</td>
+                  <td></td>
+                  <td> {contract.paymentStatus}</td>
+
+                  <td> {contract.contractStatus}</td>
                 
 
                 </tr>
