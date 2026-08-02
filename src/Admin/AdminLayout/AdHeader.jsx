@@ -1,6 +1,15 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import AuthService from "../../Services/AuthService";
+import { toast } from "react-toastify";
 export default function AdHeader() {
+
+  function logout(){
+  
+      AuthService.logout()
+      toast.success("Logout Success")
+      nav("/")
+    }
   
   return (
     <>
@@ -48,6 +57,10 @@ export default function AdHeader() {
              <Link to="/admin/manageusers" className="nav-item nav-link">
               Users
             </Link>
+                 <Link to="#" className="nav-item nav-link "onClick={logout}>
+           Logout
+
+        </Link>
           </div>
           <Link
             to=""

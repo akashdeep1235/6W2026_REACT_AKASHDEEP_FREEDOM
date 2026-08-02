@@ -3,6 +3,8 @@ import ProjectService from "../../Services/ProjectService";
 import SkillService from "../../Services/SkillService"
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
+import UserService from "../../Services/UserService";4
+import ContractService from "../../Services/ContractService";
 
 const override = {
   display: "block",
@@ -15,6 +17,23 @@ export default function Work() {
     const [skills, setSkills] = useState([])
       const[Contracts,setContracts]=useState([]);
     const [projects, setProjects] = useState([])
+    const [users,setUsers]=useState([])
+
+
+      async function getContracts() {
+        try {
+          setLoading(true)
+          const data = await ContractService.all();
+          console.log(data);
+          setContracts(data);
+        }
+        catch (err) {
+          console.log(err)
+        }
+        finally {
+          setLoading(false)
+        }
+      }
   
     async function getSkills() {
       try {
@@ -61,6 +80,8 @@ export default function Work() {
         }
 
 
+
+
   
   
   
@@ -68,6 +89,7 @@ export default function Work() {
       getProjects()
       getSkills()
       getUsers()
+      getContracts()
 
     }, [])
   
@@ -187,16 +209,23 @@ rzp1.on('payment.failed', function (response) {
                   </td>
 
 
-                  <td>
-                  {users.find((e)=> e.uid==contract.clientId)?.name}
-                  </td>
+                
                
 
                   <td> {users.find((e)=> e.uid==contract.freelancerId)?.name}</td>
-                  <td></td>
+                  <td>{projects.find((e) => e.id == contract.projectId)?.finalAmount}</td>
+
+                  <td> {projects.find((e) => e.id == contract.projectId)?.deadline}</td>
                   <td> {contract.paymentStatus}</td>
 
                   <td> {contract.contractStatus}</td>
+                  <td>   <button
+             
+              type="button" onClick={(handlePay)}
+            >
+            
+              Release Payment
+            </button></td>
                 
 
                 </tr>
@@ -207,13 +236,7 @@ rzp1.on('payment.failed', function (response) {
         }
   
         <div className="text-center">
-            <button
-              className="btn border-secondary py-3 bg-white text-primary "
-              type="button" onClick={(handlePay)}
-            >
-              <i className="bi bi-plus"></i>
-              Pay Now
-            </button>
+         
      
 </div>
 

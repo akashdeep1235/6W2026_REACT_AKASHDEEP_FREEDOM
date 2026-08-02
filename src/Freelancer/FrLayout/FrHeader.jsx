@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
+import AuthService from "../../Services/AuthService";
+import { toast } from "react-toastify";
 export default function FrHeader() {
+   function logout(){
+    
+        AuthService.logout()
+        toast.success("Logout Success")
+        nav("/")
+      }
   return (
     <>
   {/* Navbar Start */}
@@ -37,6 +45,12 @@ export default function FrHeader() {
         <Link to="/contact" className="nav-item nav-link">
           Freelancers
         </Link>
+           <Link to="#" className="nav-item nav-link "onClick={logout}>
+           Logout
+
+        </Link>
+
+
       </div>
       <Link
         to=""

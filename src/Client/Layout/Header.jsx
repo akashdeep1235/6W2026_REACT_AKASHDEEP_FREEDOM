@@ -5,7 +5,7 @@ import AuthService from "../../Services/AuthService";
 import { toast } from "react-toastify";
 
 
-export default function header() {
+export default function Header() {
   const[email,setEmail]=useState('')
   const nav=useNavigate()
   useEffect(()=>{
@@ -13,10 +13,11 @@ export default function header() {
     setEmail(res);
 
   },[])
-  function logout(){
+  async function logout(){
 
-    AuthService.logout()
+    await AuthService.logout()
     toast.success("Logout Success")
+     setEmail("");
     nav("/")
   }
     return (
@@ -75,9 +76,7 @@ export default function header() {
         </Link>
         }
 
-         <Link to="/skills" className="nav-item nav-link">
-          for cards
-        </Link>
+         
       </div>
 
       
