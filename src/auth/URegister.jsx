@@ -111,7 +111,7 @@ export default function URegister() {
       {/* Page Header End */}
       <div className="d-flex justify-content-center mt-2">
         <div className="col-lg-7">
-          <form onSubmit={register} className="">
+          <form onSubmit={register} className="" noValidate>
 
 
 
