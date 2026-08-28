@@ -102,6 +102,7 @@ export default function URegister() {
                             className="w-100 form-control border-0 py-3 mb-4"
                             placeholder="Insert your picture"
                             onChange={(e) => { setProfileImage(e.target.files[0]) }}
+                            required
                         />
 
 
@@ -110,14 +111,14 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter name"
               onChange={(e) => { setName(e.target.value) }}
-
+                required
             />
             <input
               type="email"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter email"
               onChange={(e) => { setEmail(e.target.value) }}
-
+              required
 
             />
             <input
@@ -125,15 +126,15 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Password"
               onChange={(e) => { setPassword(e.target.value) }}
-
+              required
 
             />
             <input
-              type="number"
+              type="tel"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Contact"
               onChange={(e) => { setContact(e.target.value) }}
-
+              required
 
             />
             <input
@@ -141,7 +142,7 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Addresss"
               onChange={(e) => { setAddress(e.target.value) }}
-
+              required
 
             />
 
