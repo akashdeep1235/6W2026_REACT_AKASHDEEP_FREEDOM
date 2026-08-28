@@ -25,6 +25,24 @@ export default function URegister() {
 
   async function register(e) {
     e.preventDefault()
+      if (
+    !name ||
+    !email ||
+    !password ||
+    !contact ||
+    !address ||
+    !profileImage
+  ) {
+    toast.error("Please fill all the details");
+    return;
+  }
+
+  if (userType === "freelancer" && !skills) {
+    toast.error("Please select a skill");
+    return;
+  }
+
+
 
     try {
       let imageUrl = ""
