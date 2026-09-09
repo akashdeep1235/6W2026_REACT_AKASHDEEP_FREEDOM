@@ -151,14 +151,15 @@ export default function URegister() {
               type="tel"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Contact"
-              onChange={(e) => { setContact(e.target.value) }}
+              maxLength={10}
+              onChange={(e) => { setContact(e.target.value.replace(/\D/g, '').slice(0, 10)) }}
              
 
             />
             <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
-              placeholder="Enter Addresss"
+              placeholder="Enter Address"
               onChange={(e) => { setAddress(e.target.value) }}
              
 
