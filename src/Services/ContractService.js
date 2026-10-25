@@ -53,6 +53,18 @@ class ContractService {
 
     return contracts;
   }
+  async byClient(clientId) {
+    const q = query(collection(db, "Contracts"), where("clientId", "==", clientId));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  }
+ 
+  // FREELANCER: only contracts where this user is the freelancer
+  async byFreelancer(freelancerId) {
+    const q = query(collection(db, "Contracts"), where("freelancerId", "==", freelancerId));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  }
 
   // Update Work File
   async submitWork(id, workUrl) {
