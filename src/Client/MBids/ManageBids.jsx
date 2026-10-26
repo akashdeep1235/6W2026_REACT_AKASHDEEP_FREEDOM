@@ -6,6 +6,7 @@ import { RingLoader } from "react-spinners";
 import UserService from "../../Services/UserService";
 import ContractService from "../../Services/ContractService";
 import { toast } from "react-toastify";
+import AuthService from "../../Services/AuthService";
 
 const override = {
   display: "block",
@@ -16,7 +17,7 @@ export default function ManageBids() {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([])
   const [bids, setBids] = useState([])
-
+  const uid = AuthService.getUid();
   const [projects, setProjects] = useState([])
 
 
@@ -78,19 +79,19 @@ export default function ManageBids() {
       );
 
       const project = projects.find((p) => p.id === bid.projectId);
-       await ContractService.add({
-      projectId: bid.projectId,
-      clientId: project.clientId,
-      freelancerId: bid.freelancerId,
-      workFileUrl: ""
-    });
+      await ContractService.add({
+        projectId: bid.projectId,
+        clientId: project.clientId,
+        freelancerId: bid.freelancerId,
+        workFileUrl: ""
+      });
 
 
 
 
 
 
-       toast.success("Freelancer hired successfully");
+      toast.success("Freelancer hired successfully");
 
       // Reload data
       getBids();
@@ -188,7 +189,7 @@ export default function ManageBids() {
               {bids
                 .filter((bid) => {
                   const project = projects.find((p) => p.id === bid.projectId);
-                  return project && project.projectStatus === "Open";
+                  return project && project.clientId === uid && project.projectStatus === "Open";   // CHANGED
                 })
                 .map((bid, index) => (
                   <tr >

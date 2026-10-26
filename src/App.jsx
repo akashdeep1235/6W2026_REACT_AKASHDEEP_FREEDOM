@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './Firebase/FirebaseConfig'  
+import './Firebase/FirebaseConfig'
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
@@ -38,6 +38,7 @@ import ProjectService from "./Services/ProjectService";
 import Bids from "./Freelancer/Abids/Bids";
 import AddBids from "./Freelancer/Abids/AddBids";
 import ManageFreelancerReq from "./Admin/FrRequests/FreelancerReq";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 
 
@@ -51,62 +52,67 @@ export default function App() {
         <Routes>
 
           {/* Admin Route */}
-          <Route path="/admin" element={<AdLayout />}>
-            <Route path="manageskills" element={<ManageSkills />} />
-            <Route path="manageskills/addskills" element={<AddSkills />} />
-            <Route path="manageskills/editskills/:id" element={<EditSkills/>} />
-            <Route path="managerequests" element={<ManageFreelancerReq />} />
+          <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+             <Route path="/admin" element={<AdLayout />}>
+               <Route path="manageskills" element={<ManageSkills />} />
+               <Route path="manageskills/addskills" element={<AddSkills />} />
+               <Route path="manageskills/editskills/:id" element={<EditSkills />} />
+               <Route path="managerequests" element={<ManageFreelancerReq />} />
 
-            <Route path="mprojects" element={<ManageProjects/>}/>
-            <Route path="orders" element={<Orders/>} />
-            <Route path="manageusers" element={<ManageUsers/>} />
-       
-            <Route path="managecontracts" element={<ManageContracts/>} />
+               <Route path="mprojects" element={<ManageProjects />} />
+               <Route path="orders" element={<Orders />} />
+               <Route path="manageusers" element={<ManageUsers />} />
 
-            
-            <Route path="managepayments" element={<ManagePayments/>} />
+               <Route path="managecontracts" element={<ManageContracts />} />
 
 
+               <Route path="managepayments" element={<ManagePayments />} />
 
 
-          </Route>
 
 
-          {/*Customer Route */}
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/skills" element={<Skills />} />
+              </Route>
+            </Route>
+
+
+        {/*Customer Route */}
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route element={<ProtectedRoute allowedRoles={["client"]} />}>
             <Route path="/projects" element={<Projects />} />
             <Route path="/addproject" element={<AddProject />} />
-            <Route path="managebids" element={<ManageBids/>} />
-
+            <Route path="managebids" element={<ManageBids />} />
+    
             <Route path="/work" element={<Work />} />
             <Route path="/rate" element={<Rate />} />
-            <Route path="/contact" element={<Contact />} />
-     
+      
+
             <Route path="/profile" element={<Profile />} />
-            <Route path="/uregister" element={<URegister />} />
-            <Route path="/userlogin" element={<UserLogin />} />
-         
-
-
-
           </Route>
+          <Route path="/uregister" element={<URegister />} />
+          <Route path="/userlogin" element={<UserLogin />} />
 
 
-          {/* Freelancer Route */}
+
+
+        </Route>
+
+
+        {/* Freelancer Route */}
+        <Route element={<ProtectedRoute allowedRoles={["freelancer"]} />}>
           <Route path="/freelancer" element={<FrLayout />}>
             <Route path="bids" element={<Bids />} />
-            <Route path="bids/addbids/:id" element={<AddBids/>} />
-            
-            
-
+            <Route path="bids/addbids/:id" element={<AddBids />} />
           </Route>
 
-        </Routes>
+        </Route>
 
-      </BrowserRouter>
-       <ToastContainer position="top-right" autoClose={3000} />
+      </Routes>
+
+    </BrowserRouter >
+      <ToastContainer position="top-right" autoClose={3000} />
         </>
   );
 }

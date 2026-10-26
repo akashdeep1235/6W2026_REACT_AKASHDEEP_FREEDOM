@@ -51,6 +51,11 @@ class UserService {
 
     if (userDoc.exists()) {
       const firestoreData = userDoc.data()
+
+    if (firestoreData.status === "pending" || firestoreData.status === "rejected") {
+     await signOut(auth)
+     return { status: firestoreData.status }
+   }
       const authData = {
         uid: user.uid,
         name: firestoreData.name,

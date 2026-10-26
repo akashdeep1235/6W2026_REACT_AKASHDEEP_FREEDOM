@@ -10,13 +10,13 @@ export default function ProtectedRoute({ allowedRoles }) {
 
   // Not logged in -> go to login
   if (!loggedIn) {
-    toast.error("Please login first");
+    toast.error("Please login first", { toastId: "auth-guard" });
     return <Navigate to="/userlogin" replace state={{ from: location }} />;
   }
 
   // Logged in but wrong role -> go home
   if (allowedRoles && !allowedRoles.includes(role)) {
-    toast.error("Unauthorised");
+    toast.error("Unauthorised", { toastId: "auth-guard" });
     return <Navigate to="/" replace />;
   }
 
