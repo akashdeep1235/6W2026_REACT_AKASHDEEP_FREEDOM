@@ -384,9 +384,16 @@ export default function Work() {
                         Chat
                       </Link>
 
+                      {/* NEW: View Work button, shown once the freelancer has submitted a link */}
+                      {contract.workFileUrl?.startsWith("http") && (
+                        <a href={contract.workFileUrl} target="_blank" rel="noreferrer" className="btn btn-outline-secondary btn-sm me-2">
+                          View Work
+                        </a>
+                      )}
+
                       {contract.paymentStatus === "Paid" ? (
                         <span className="badge bg-success">Paid</span>
-                      ) : (
+                      ) : contract.contractStatus === "Submitted" ? (   // CHANGED: pay only after work is submitted
                         <button
                           type="button"
                           className="btn btn-primary btn-sm"
@@ -394,6 +401,8 @@ export default function Work() {
                         >
                           Release Payment
                         </button>
+                      ) : (
+                        <span className="text-muted">Waiting for work</span>   // NEW
                       )}
                     </td>
                   </tr>
