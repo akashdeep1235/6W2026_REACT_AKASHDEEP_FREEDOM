@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './Firebase/FirebaseConfig'
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import ChatPage from "./Common/ChatPage";
 
 //Customer imports
 import Layout from "./Client/Layout/Layout";

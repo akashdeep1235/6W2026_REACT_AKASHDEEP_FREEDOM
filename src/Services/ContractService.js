@@ -3,7 +3,9 @@ import {
   collection,
   getDocs,
   doc,
-  updateDoc
+  updateDoc,
+  query,    
+  where 
 } from "firebase/firestore";
 
 import { db } from "../Firebase/FirebaseConfig";

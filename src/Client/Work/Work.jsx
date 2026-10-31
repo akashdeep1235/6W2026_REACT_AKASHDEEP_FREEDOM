@@ -34,7 +34,7 @@
 //           setLoading(false)
 //         }
 //       }
-  
+
 //     async function getSkills() {
 //       try {
 //         setLoading(true)
@@ -48,8 +48,8 @@
 //         setLoading(false)
 //       }
 //     }
-  
-  
+
+
 //     async function getProjects() {
 //       try {
 //         setLoading(true)
@@ -82,9 +82,9 @@
 
 
 
-  
-  
-  
+
+
+
 //     useEffect(() => {
 //       getProjects()
 //       getSkills()
@@ -92,7 +92,7 @@
 //       getContracts()
 
 //     }, [])
-  
+
 
 //   async function handlePay(){
 //     var options = {
@@ -108,7 +108,7 @@
 
 
 //     },
-    
+
 //     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
 //         "name": "Gaurav Kumar", //your customer's name
 //         "email": "gaurav.kumar@example.com",
@@ -136,7 +136,7 @@
 
 //   }
 //   return (
-   
+
 //     <>
 //   {/* Page Header Start */}
 //   <div
@@ -173,15 +173,15 @@
 //             aria-label="Loading Spinner"
 //             data-testid="loader"
 //           />
-  
-  
+
+
 //           : <div className="table-responsive m-5 ">
 //             <table className="table border ">
 //               <thead>
 //                 <tr>
 //                   <th scope="col ">Sr.no</th>
 //                   <th scope="col ">Project</th>
-  
+
 //                   <th scope="col"> Freelancer</th>
 //                   <th scope="col">Final Amount</th>
 //                   <th>Deadline</th>
@@ -189,13 +189,13 @@
 //                   <th>Payment status</th>
 //                   <th>Action </th>
 
-                  
 
 
-                  
-                  
-  
-  
+
+
+
+
+
 //                 </tr>
 //               </thead>
 //               <tbody>
@@ -209,8 +209,8 @@
 //                   </td>
 
 
-                
-               
+
+
 
 //                   <td> {users.find((e)=> e.uid==contract.freelancerId)?.name}</td>
 //                   <td>{projects.find((e) => e.id == contract.projectId)?.finalAmount}</td>
@@ -220,13 +220,13 @@
 
 //                   <td> {contract.contractStatus}</td>
 //                   <td>   <button
-             
+
 //               type="button" onClick={(handlePay)}
 //             >
-            
+
 //               Release Payment
 //             </button></td>
-                
+
 
 //                 </tr>
 //               ))}
@@ -234,10 +234,10 @@
 //             </table>
 //           </div>
 //         }
-  
+
 //         <div className="text-center">
-         
-     
+
+
 // </div>
 
 
@@ -380,13 +380,17 @@ export default function Work() {
                     {/* FIXED: columns were swapped (this showed contract status) */}
                     <td>{contract.paymentStatus}</td>
                     <td>
-                      {contract.paymentStatus === "Paid" ? (                    // NEW: hide the button once the contract is paid
-                        <span className="badge bg-success">Paid</span>          // NEW: green "Paid" badge
+                      <Link to={`/chat/${contract.id}`} className="btn btn-outline-primary btn-sm me-2">
+                        Chat
+                      </Link>
+
+                      {contract.paymentStatus === "Paid" ? (
+                        <span className="badge bg-success">Paid</span>
                       ) : (
                         <button
                           type="button"
-                          className="btn btn-primary btn-sm"                    // NEW: Bootstrap button styling
-                          onClick={() => handlePay(contract, project?.finalAmount)}   // CHANGED: passes contract and amount, was onClick={handlePay}
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handlePay(contract, project?.finalAmount)}
                         >
                           Release Payment
                         </button>
