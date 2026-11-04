@@ -36,6 +36,13 @@ import { db } from "../Firebase/FirebaseConfig";
       updatedAt:Date.now()
     });
   }
+
+  async completeProject(projectId) {
+  await updateDoc(doc(db, "projects", projectId), {
+    projectStatus: "Completed",
+    updatedAt: Date.now()
+  });
+}
 }
 
 

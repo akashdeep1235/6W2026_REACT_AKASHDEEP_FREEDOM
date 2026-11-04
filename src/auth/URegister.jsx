@@ -17,6 +17,7 @@ export default function URegister() {
   const [profileImage, setProfileImage] = useState('');
   const [skills, setSkills] = useState('');
   const [skillList, setSkillList] = useState([]);
+  const [resume, setResume] = useState();
 
 
 
@@ -25,22 +26,26 @@ export default function URegister() {
 
   async function register(e) {
     e.preventDefault()
-      if (
-    !name ||
-    !email ||
-    !password ||
-    !contact ||
-    !address ||
-    !profileImage
-  ) {
-    toast.error("Please fill all the details");
-    return;
-  }
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !contact ||
+      !address ||
+      !profileImage
+    ) {
+      toast.error("Please fill all the details");
+      return;
+    }
 
-  if (userType === "freelancer" && !skills) {
-    toast.error("Please select a skill");
-    return;
-  }
+    if (userType === "freelancer" && !skills) {
+      toast.error("Please select a skill");
+      return;
+    }
+    if (userType === "freelancer" && !resume) {
+      toast.error("Please upload your resume");
+      return;
+    }
 
 
 
@@ -49,6 +54,11 @@ export default function URegister() {
       if (profileImage) {
         imageUrl = await CloudinaryService.upload(profileImage)
       }
+      let resumeUrl = "";
+
+      if (userType === "freelancer" && resume) {
+        resumeUrl = await CloudinaryService.upload(resume);
+      }
       let payload = {
         name: name,
         email: email,
@@ -56,9 +66,9 @@ export default function URegister() {
         userType: userType,
         contact: contact,
         address: address,
-        profileImage:imageUrl,
+        profileImage: imageUrl,
         skills: userType === "freelancer" ? skills : "",
-
+        resumeUrl: userType === "freelancer" ? resumeUrl : ""
       }
 
       await UserService.register(payload)
@@ -74,14 +84,14 @@ export default function URegister() {
 
   }
   useEffect(() => {
-  SkillService.all()
-    .then((res) => {
-      setSkillList(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}, []);
+    SkillService.all()
+      .then((res) => {
+        setSkillList(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
@@ -115,13 +125,13 @@ export default function URegister() {
 
 
 
-             <input
-                            type="file"
-                            className="w-100 form-control border-0 py-3 mb-4"
-                            placeholder="Insert your picture"
-                            onChange={(e) => { setProfileImage(e.target.files[0]) }}
-                           
-                        />
+            <input
+              type="file"
+              className="w-100 form-control border-0 py-3 mb-4"
+              placeholder="Insert your picture"
+              onChange={(e) => { setProfileImage(e.target.files[0]) }}
+
+            />
 
 
             <input
@@ -129,14 +139,14 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter name"
               onChange={(e) => { setName(e.target.value) }}
-               
+
             />
             <input
               type="email"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter email"
               onChange={(e) => { setEmail(e.target.value) }}
-             
+
 
             />
             <input
@@ -144,7 +154,7 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Password"
               onChange={(e) => { setPassword(e.target.value) }}
-             
+
 
             />
             <input
@@ -153,7 +163,7 @@ export default function URegister() {
               placeholder="Enter Contact"
               maxLength={10}
               onChange={(e) => { setContact(e.target.value.replace(/\D/g, '').slice(0, 10)) }}
-             
+
 
             />
             <input
@@ -161,7 +171,7 @@ export default function URegister() {
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Address"
               onChange={(e) => { setAddress(e.target.value) }}
-             
+
 
             />
 
@@ -182,23 +192,47 @@ export default function URegister() {
 
               </select>
             </div>
-            {userType === "freelancer" && (
-    <div className="form-group mt-3">
-        <select
-            className="form-control"
-            value={skills}
-            onChange={(e) => setSkills(e.target.value)}
-        >
-            <option value="">Select Skill</option>
 
-            {skillList.map((item) => (
-                <option key={item.id} value={item.id}>
-                    {item.name}
-                </option>
-            ))}
-        </select>
-    </div>
-)}
+            {userType === "freelancer" && (
+              <>
+                {/* Select Skill */}
+                <div className="mb-4">
+                  <label className="form-label">Select Skill</label>
+                  <select
+                    className="form-select py-3"
+                    value={skills}
+                    onChange={(e) => setSkills(e.target.value)}
+                  >
+                    <option value="">Select Skill</option>
+
+                    {skillList.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Upload Resume */}
+                <div className="mb-4">
+                  <label className="form-label fw-semibold">
+                    Upload Resume
+                  </label>
+
+                  <input
+                    type="file"
+                    className="form-control py-3"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => setResume(e.target.files[0])}
+                  />
+
+                  <small className="text-muted">
+                    Upload your resume in PDF, DOC or DOCX format.
+                  </small>
+                </div>
+              </>
+            )}
+
 
             <button
               className="w-100 btn form-control border-secondary py-3 bg-white text-primary "

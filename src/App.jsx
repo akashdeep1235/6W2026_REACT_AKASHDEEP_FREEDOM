@@ -66,7 +66,7 @@ export default function App() {
               <Route path="managerequests" element={<ManageFreelancerReq />} />
 
               <Route path="mprojects" element={<ManageProjects />} />
-              <Route path="orders" element={<Orders />} />
+         
               <Route path="manageusers" element={<ManageUsers />} />
 
               <Route path="managecontracts" element={<ManageContracts />} />

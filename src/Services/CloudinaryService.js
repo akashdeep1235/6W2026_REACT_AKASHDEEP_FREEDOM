@@ -1,17 +1,30 @@
-const cloudName = 'ypvuaicr'
-const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`
 
-import axios from "axios"
+const cloudName = 'ypvuaicr';
 
-class CloudinaryService{
-    async upload(image){
-        let formData = new FormData()
-        formData.append('file', image)
-        formData.append('upload_preset', 'freedom')
+import axios from "axios";
 
-        const res = await axios.post(uploadUrl, formData)
+class CloudinaryService {
+
+    async upload(file) {
+
+        let formData = new FormData();
+
+        formData.append('file', file);
+        formData.append('upload_preset', 'freedom');
+
+        let uploadUrl;
+
+        if (file.type.startsWith("image/")) {
+            uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+        }
+        else {
+            uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`;
+        }
+
+        const res = await axios.post(uploadUrl, formData);
+
         return res.data.secure_url;
     }
 }
 
-export default new CloudinaryService;
+export default new CloudinaryService();
