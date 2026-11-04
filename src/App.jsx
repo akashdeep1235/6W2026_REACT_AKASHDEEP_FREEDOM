@@ -26,6 +26,7 @@ import ManageUsers from "./Admin/MUsers/ManageUsers";
 import ManageBids from "./Client/MBids/ManageBids";
 import ManageContracts from "./Admin/MContracts/ManageContracts";
 import ManagePayments from "./Admin/Payments/ManagePayments";
+
 import URegister from "./auth/URegister";
 
 import ManageProjects from "./Admin/MProjects/ManageProjects";
@@ -69,6 +70,7 @@ export default function App() {
               <Route path="manageusers" element={<ManageUsers />} />
 
               <Route path="managecontracts" element={<ManageContracts />} />
+              
 
 
               <Route path="managepayments" element={<ManagePayments />} />
