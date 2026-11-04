@@ -84,19 +84,20 @@ class ContractService {
   }
 
   // Release Payment
-  async releasePayment(id) {
+async releasePayment(id, projectId) {
+  await updateDoc(doc(db, "Contracts", id), {
+    paymentStatus: "Paid",
+    contractStatus: "Completed",
+    updatedAt: Date.now()
+  });
 
-    await updateDoc(doc(db, "Contracts", id), {
-
-      paymentStatus: "Paid",
-
-      contractStatus: "Completed",
-
+  if (projectId) {
+    await updateDoc(doc(db, "projects", projectId), {
+      projectStatus: "Completed",
       updatedAt: Date.now()
-
     });
-
   }
+}
 
 }
 

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import AuthService from "../../Services/AuthService";
 import { toast } from "react-toastify";
 export default function FrHeader() {
+  const nav = useNavigate();
   function logout() {
 
     AuthService.logout()
@@ -28,6 +30,7 @@ export default function FrHeader() {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <div className="navbar-nav ms-auto p-4 p-lg-0">
+            <Link to="/freelancer/home" className="nav-item nav-link">Home</Link>
          
             <Link to="/freelancer/bids" className="nav-item nav-link">
               Bids
@@ -36,16 +39,11 @@ export default function FrHeader() {
             <Link to="/freelancer/contracts" className="nav-item nav-link">
               Contracts
             </Link>
-            <Link to="/projects" className="nav-item nav-link">
-              Projects
-            </Link>
-            <Link to="/about" className="nav-item nav-link">
-              Profile
-            </Link>
+            <Link to="/freelancer/contact" className="nav-item nav-link">Contact</Link>
+           <Link to="/freelancer/profile" className="nav-item nav-link">Profile</Link>
+           
 
-            <Link to="/contact" className="nav-item nav-link">
-              Freelancers
-            </Link>
+         
             <Link to="#" className="nav-item nav-link " onClick={logout}>
               Logout
 

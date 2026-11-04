@@ -3,6 +3,8 @@ import './Firebase/FirebaseConfig'
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ChatPage from "./Common/ChatPage";
+import ProfilePage from "./Common/ProfilePage";
+import ContactPage from "./Common/ContactPage";
 
 //Customer imports
 import Layout from "./Client/Layout/Layout";
@@ -30,6 +32,7 @@ import ManageProjects from "./Admin/MProjects/ManageProjects";
 
 
 //Freelancer imports
+import FrHome from "./Freelancer/Home/FrHome";
 import FrLayout from "./Freelancer/FrLayout/FrLayout";
 import ManageGigs from "./Freelancer/Abids/Bids";
 import AddGigs from "./Freelancer/Abids/AddBids";
@@ -90,12 +93,20 @@ export default function App() {
               <Route path="/work" element={<Work />} />
               <Route path="/chat/:id" element={<ChatPage />} />
               <Route path="/rate" element={<Rate />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="contact" element={<ContactPage />} />
 
 
-              <Route path="/profile" element={<Profile />} />
+
             </Route>
             <Route path="/uregister" element={<URegister />} />
             <Route path="/userlogin" element={<UserLogin />} />
+
+            <Route path="/rate" element={<Rate />} />
+            <Route path="/rate/:id" element={<Rate />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="contact" element={<ContactPage />} />
+
 
 
 
@@ -105,11 +116,16 @@ export default function App() {
 
           {/* Freelancer Route */}
           <Route element={<ProtectedRoute allowedRoles={["freelancer"]} />}>
+
             <Route path="/freelancer" element={<FrLayout />}>
+              <Route index element={<FrHome />} />
+              <Route path="home" element={<FrHome />} />
               <Route path="bids" element={<Bids />} />
               <Route path="bids/addbids/:id" element={<AddBids />} />
               <Route path="contracts" element={<MyContracts />} />
               <Route path="chat/:id" element={<ChatPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="contact" element={<ContactPage />} />
             </Route>
 
           </Route>

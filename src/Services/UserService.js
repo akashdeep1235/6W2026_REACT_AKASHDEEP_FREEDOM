@@ -62,9 +62,9 @@ class UserService {
         email: user.email,
         password:user.password,
         userType: firestoreData.userType,
-         status: firestoreData.status,
+        status: firestoreData.status,
         token: await user.getIdToken(),
-        image:user.image
+        image: firestoreData.profileImage
       };
 
       await AuthService.setData(authData);
@@ -107,6 +107,22 @@ async reject(id) {
     updatedAt: Date.now(),
   });
 }
+  async getById(uid) {
+    const snap = await getDoc(doc(db, "users", uid));
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  }
+ 
+  // Update only the editable profile fields
+  async updateProfile(uid, data) {
+    await updateDoc(doc(db, "users", uid), {
+      name: data.name,
+      contact: data.contact,
+      address: data.address,
+      skills: data.skills,
+      profileImage: data.profileImage,
+      updatedAt: Date.now(),
+    });
+  }
 
 
 }

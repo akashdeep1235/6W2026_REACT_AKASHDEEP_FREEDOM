@@ -12,7 +12,7 @@ const override = {
 export default function Bids() {
   const [loading, setLoading] = useState(false);
   const [skills, setSkills] = useState([])
-  
+
   const [projects, setProjects] = useState([])
 
   async function getSkills() {
@@ -117,41 +117,40 @@ export default function Bids() {
               </tr>
             </thead>
             <tbody>
-              {projects.map((project, index) => (
-                <tr >
-                  <td>
-                    {index + 1}
-                  </td>
-                  <td>
-                    {
+              {projects
+                .filter((p) => (p.projectStatus || "Open") === "Open")
+                .map((project, index) => (
+                  <tr key={project.id}>
+                    <td>
+                      {index + 1}
+                    </td>
+                    <td>
+                      {
 
 
-                      skills.find((c) => c.id == project.categoryId)?.name
+                        skills.find((c) => c.id == project.categoryId)?.name
 
-                    }
-                  </td>
-
-
-                  <td>{project.title}</td>
-                  <td>{project.description}</td>
-
-                  <td>₹ {project.budget}</td>
-                  <td>{project.deadline}</td>
-                  <td>
-                    <Link to={`/freelancer/bids/addbids/${project.id}`}>
-                      <button>  Add Bids</button>
-                    </Link>
-                    &nbsp;
-                    <button onClick={() => { deleteskill(skill.id) }} className="btn btn-md rounded-circle bg-light border ">
-                      <i className="bi bi-trash text-danger" />
-                    </button>
+                      }
+                    </td>
 
 
-                  </td>
+                    <td>{project.title}</td>
+                    <td>{project.description}</td>
+
+                    <td>₹ {project.budget}</td>
+                    <td>{project.deadline}</td>
+                    <td>
+                      <Link to={`/freelancer/bids/addbids/${project.id}`}>
+                        <button>  Add Bids</button>
+                      </Link>
+                      
 
 
-                </tr>
-              ))}
+                    </td>
+
+
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
