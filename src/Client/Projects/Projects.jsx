@@ -1,10 +1,62 @@
+
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-export default function Projects(){
+import ProjectService from "../../Services/ProjectService";
+import AuthService from "../../Services/AuthService";
 
-    return(
-        <>
-              <div
+export default function Projects() {
+
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const uid = AuthService.getUid();
+
+      const res = await ProjectService.all();
+
+      // Show only logged-in customer's projects
+      const myProjects = res.filter(
+        (project) => project.clientId === uid
+      );
+
+      setProjects(myProjects);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter projects according to status
+  const filteredProjects = projects.filter((project) => {
+
+    if (filter === "All") {
+      return true;
+    }
+
+    if (filter === "Complete Projects") {
+      return project.projectStatus === "Completed";
+    }
+
+    if (filter === "Ongoing Projects") {
+      return project.projectStatus !== "Completed";
+    }
+
+    return true;
+  });
+
+  return (
+    <>
+      {/* Page Header Start */}
+      <div
         className="container-fluid page-header py-5 mb-5 wow fadeIn"
         data-wow-delay="0.1s"
       >
@@ -12,16 +64,15 @@ export default function Projects(){
           <h1 className="display-3 text-white mb-4 animated slideInDown">
             Projects
           </h1>
+
           <nav aria-label="breadcrumb animated slideInDown">
             <ol className="breadcrumb justify-content-center mb-0">
               <li className="breadcrumb-item">
-                <Link to="#">Home</Link>
+                <Link to="/">Home</Link>
               </li>
-              <li className="breadcrumb-item">
-                <Link to="#">Projects</Link>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                Add Projects
+
+              <li className="breadcrumb-item active">
+                Projects
               </li>
             </ol>
           </nav>
@@ -29,199 +80,140 @@ export default function Projects(){
       </div>
       {/* Page Header End */}
 
+      {/* Browse Projects Start */}
       <div className="container mb-5">
+
         <div className="d-flex justify-content-between mt-5">
-          <h1 className="text-center"> Browse Projects </h1>
-                 <Link to="/addproject">
+          <h1 className="text-center">Browse Projects</h1>
+
+          <Link to="/addproject">
             <button
-              className="btn border-secondary py-3 bg-white text-primary "
-              type="submit"
+              className="btn border-secondary py-3 bg-white text-primary"
+              type="button"
             >
               <i className="bi bi-plus"></i>
               Add Project
             </button>
           </Link>
-
-
-
         </div>
-        {/* Single Page Header End */}
 
       </div>
-      <>
-  {/* Projects Start */}
-  <div className="container-xxl py-5">
-    <div className="container">
-      <div
-        className="text-center mx-auto wow fadeInUp"
-        data-wow-delay="0.1s"
-        style={{ maxWidth: 500 }}
-      >
-        <p className="fs-5 fw-bold text-primary">Your Projects</p>
-        <h1 className="display-5 mb-5">No Projects yet</h1>
-      </div>
-      <div className="row wow fadeInUp" data-wow-delay="0.3s">
-        <div className="col-12 text-center">
-          <ul className="list-inline rounded mb-5" id="portfolio-flters">
-            <li className="mx-2 active" data-filter="*">
-              All
-            </li>
-            <li className="mx-2" data-filter=".first">
-              Complete Projects
-            </li>
-            <li className="mx-2" data-filter=".second">
-              Ongoing Projects
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="row g-4 portfolio-container">
-        <div
-          className="col-lg-4 col-md-6 portfolio-item first wow fadeInUp"
-          data-wow-delay="0.1s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-1.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Landscaping</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-1.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-lg-4 col-md-6 portfolio-item second wow fadeInUp"
-          data-wow-delay="0.3s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-2.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Pruning plants</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-2.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-lg-4 col-md-6 portfolio-item first wow fadeInUp"
-          data-wow-delay="0.5s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-3.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Irrigation &amp; Drainage</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-3.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-lg-4 col-md-6 portfolio-item second wow fadeInUp"
-          data-wow-delay="0.1s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-4.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Garden Maintenance</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-4.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-lg-4 col-md-6 portfolio-item first wow fadeInUp"
-          data-wow-delay="0.3s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-5.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Green Technology</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-5.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="col-lg-4 col-md-6 portfolio-item second wow fadeInUp"
-          data-wow-delay="0.5s"
-        >
-          <div className="portfolio-inner rounded">
-            <img className="img-fluid" src="img/service-6.jpg" alt="" />
-            <div className="portfolio-text">
-              <h4 className="text-white mb-4">Urban Gardening</h4>
-              <div className="d-flex">
-                <Link
-                  className="btn btn-lg-square rounded-circle mx-2"
-                  to="img/service-6.jpg"
-                  data-lightbox="portfolio"
-                >
-                  <i className="fa fa-eye" />
-                </Link>
-                <Link className="btn btn-lg-square rounded-circle mx-2" to="">
-                  <i className="fa fa-link" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  {/* Projects End */}
-</>
+      {/* Browse Projects End */}
 
+      {/* Projects Start */}
+      <div className="container-xxl py-5">
+        <div className="container">
 
-        
-        </>
-    )
+          <div
+            className="text-center mx-auto wow fadeInUp"
+            data-wow-delay="0.1s"
+            style={{ maxWidth: 500 }}
+          >
+            <p className="fs-5 fw-bold text-primary">
+              Your Projects
+            </p>
+
+            <h1 className="display-5 mb-5">
+              {loading
+                ? "Loading Projects..."
+                : projects.length === 0
+                ? "No Projects yet"
+                : "My Projects"}
+            </h1>
+          </div>
+
+          {/* Project Filters */}
+          <div className="row wow fadeInUp" data-wow-delay="0.3s">
+
+            <div className="col-12 text-center">
+              <ul className="list-inline rounded mb-5">
+
+                {["All", "Complete Projects", "Ongoing Projects"].map(
+                  (item) => (
+                    <li
+                      key={item}
+                      className={`list-inline-item mx-2 ${
+                        filter === item ? "active" : ""
+                      }`}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setFilter(item)}
+                    >
+                      {item}
+                    </li>
+                  )
+                )}
+
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Dynamic Projects */}
+          <div className="row g-4">
+
+            {!loading && filteredProjects.length === 0 && (
+              <div className="col-12 text-center">
+                <h4 className="text-muted">
+                  {projects.length === 0
+                    ? "No Projects yet. Add your first project!"
+                    : "No projects found in this category."}
+                </h4>
+              </div>
+            )}
+
+            {filteredProjects.map((project) => (
+
+              <div
+                className="col-lg-4 col-md-6 wow fadeInUp"
+                key={project.id}
+              >
+
+                <div className="border rounded p-4 h-100">
+
+                  <h4 className="text-primary mb-3">
+                    {project.title}
+                  </h4>
+
+                  <p>
+                    {project.description}
+                  </p>
+
+                  <p>
+                    <strong>Budget:</strong> ₹{project.budget}
+                  </p>
+
+                  <p>
+                    <strong>Deadline:</strong>{" "}
+                    {project.deadline}
+                  </p>
+
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    <span
+                      className={`badge ${
+                        project.projectStatus === "Completed"
+                          ? "bg-success"
+                          : project.projectStatus === "In Progress"
+                          ? "bg-warning text-dark"
+                          : "bg-primary"
+                      }`}
+                    >
+                      {project.projectStatus}
+                    </span>
+                  </p>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+      </div>
+      {/* Projects End */}
+
+    </>
+  );
 }

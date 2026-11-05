@@ -1,220 +1,358 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../Services/UserService";
-import { ToastContainer } from "react-toastify"
+import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify"
 import CloudinaryService from "../Services/CloudinaryService";
 import SkillService from "../Services/SkillService";
-import axios from 'axios'
+
 export default function URegister() {
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [contact, setContact] = useState("")
-  const [address, setAddress] = useState("")
-  const [userType, setUserType] = useState("client")
-  const [profileImage, setProfileImage] = useState('');
-  const [skills, setSkills] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [contact, setContact] = useState("");
+  const [address, setAddress] = useState("");
+  const [userType, setUserType] = useState("client");
+
+  const [profileImage, setProfileImage] = useState("");
+  const [skills, setSkills] = useState("");
   const [skillList, setSkillList] = useState([]);
-  const [resume, setResume] = useState();
+  const [resume, setResume] = useState("");
 
-
+  const [loading, setLoading] = useState(false);
 
   const nav = useNavigate();
 
-
+  // Register User
   async function register(e) {
-    e.preventDefault()
+
+    e.preventDefault();
+
+    if (loading) return;
+
+    // Required field validation
     if (
-      !name ||
-      !email ||
+      !name.trim() ||
+      !email.trim() ||
       !password ||
       !contact ||
-      !address ||
+      !address.trim() ||
       !profileImage
     ) {
       toast.error("Please fill all the details");
       return;
     }
 
-    if (userType === "freelancer" && !skills) {
-      toast.error("Please select a skill");
-      return;
-    }
-    if (userType === "freelancer" && !resume) {
-      toast.error("Please upload your resume");
+    // Contact validation
+    if (contact.length !== 10) {
+      toast.error("Contact number must contain 10 digits");
       return;
     }
 
+    // Password validation
+    if (password.length < 6) {
+      toast.error("Password must contain at least 6 characters");
+      return;
+    }
 
+    // Profile image validation
+    if (!profileImage.type.startsWith("image/")) {
+      toast.error("Please upload a valid profile image");
+      return;
+    }
+
+    // Freelancer validation
+    if (userType === "freelancer") {
+
+      if (!skills) {
+        toast.error("Please select a skill");
+        return;
+      }
+
+      if (!resume) {
+        toast.error("Please upload your resume");
+        return;
+      }
+
+      const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ];
+
+      if (!allowedTypes.includes(resume.type)) {
+        toast.error("Only PDF, DOC and DOCX files are allowed");
+        return;
+      }
+    }
 
     try {
-      let imageUrl = ""
+
+      setLoading(true);
+
+      // Upload Profile Image
+      let imageUrl = "";
+
       if (profileImage) {
-        imageUrl = await CloudinaryService.upload(profileImage)
+        imageUrl = await CloudinaryService.upload(profileImage);
       }
+
+      // Upload Resume
       let resumeUrl = "";
 
       if (userType === "freelancer" && resume) {
         resumeUrl = await CloudinaryService.upload(resume);
       }
+
+      // Prepare User Data
       let payload = {
-        name: name,
-        email: email,
+
+        name: name.trim(),
+        email: email.trim(),
         password: password,
         userType: userType,
         contact: contact,
-        address: address,
+        address: address.trim(),
         profileImage: imageUrl,
+
         skills: userType === "freelancer" ? skills : "",
+
         resumeUrl: userType === "freelancer" ? resumeUrl : ""
+
+      };
+
+      // Save User
+      await UserService.register(payload);
+
+      toast.success("Registration successful!");
+
+      nav("/userlogin");
+
+    }
+
+    catch (err) {
+
+      console.log("Registration Error:", err);
+
+      if (err.code === "auth/email-already-in-use") {
+        toast.error("This email is already registered");
       }
 
-      await UserService.register(payload)
+      else if (err.code === "auth/invalid-email") {
+        toast.error("Please enter a valid email address");
+      }
 
-      toast.success("user added")
-      nav("/userlogin")
-    }
-    catch (err) {
-      console.log("Error:", err)
-      toast.error("Error detected")
+      else if (err.code === "auth/weak-password") {
+        toast.error("Password must contain at least 6 characters");
+      }
+
+      else {
+        toast.error("Registration failed. Please try again.");
+      }
+
     }
 
+    finally {
+      setLoading(false);
+    }
 
   }
+
+  // Fetch Skills
   useEffect(() => {
+
     SkillService.all()
+
       .then((res) => {
         setSkillList(res);
       })
+
       .catch((err) => {
-        console.log(err);
+        console.log("Skill Fetch Error:", err);
+        toast.error("Unable to load skills");
       });
+
   }, []);
 
   return (
     <>
+
+      {/* Page Header Start */}
       <div
         className="container-fluid page-header py-5 mb-5 wow fadeIn"
         data-wow-delay="0.1s"
       >
+
         <div className="container text-center py-5">
+
           <h1 className="display-3 text-white mb-4 animated slideInDown">
             Register
           </h1>
+
           <nav aria-label="breadcrumb animated slideInDown">
+
             <ol className="breadcrumb justify-content-center mb-0">
+
               <li className="breadcrumb-item">
                 <Link to="#">Home</Link>
               </li>
+
               <li className="breadcrumb-item">
                 <Link to="#">Pages</Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">
+
+              <li
+                className="breadcrumb-item active"
+                aria-current="page"
+              >
                 Register
               </li>
+
             </ol>
+
           </nav>
+
         </div>
       </div>
       {/* Page Header End */}
+
+
+      {/* Registration Form Start */}
       <div className="d-flex justify-content-center mt-2">
+
         <div className="col-lg-7">
-          <form onSubmit={register} className="" noValidate>
 
+          <form onSubmit={register} noValidate>
 
-
+            {/* Profile Image */}
             <input
               type="file"
               className="w-100 form-control border-0 py-3 mb-4"
-              placeholder="Insert your picture"
-              onChange={(e) => { setProfileImage(e.target.files[0]) }}
-
+              accept="image/*"
+              onChange={(e) => setProfileImage(e.target.files[0] || "")}
             />
 
 
+            {/* Name */}
             <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter name"
-              onChange={(e) => { setName(e.target.value) }}
-
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
+
+
+            {/* Email */}
             <input
               type="email"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter email"
-              onChange={(e) => { setEmail(e.target.value) }}
-
-
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
+
+
+            {/* Password */}
             <input
               type="password"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Password"
-              onChange={(e) => { setPassword(e.target.value) }}
-
-
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+
+
+            {/* Contact */}
             <input
               type="tel"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Contact"
               maxLength={10}
-              onChange={(e) => { setContact(e.target.value.replace(/\D/g, '').slice(0, 10)) }}
-
-
+              value={contact}
+              onChange={(e) => {
+                setContact(
+                  e.target.value.replace(/\D/g, "").slice(0, 10)
+                );
+              }}
             />
+
+
+            {/* Address */}
             <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
               placeholder="Enter Address"
-              onChange={(e) => { setAddress(e.target.value) }}
-
-
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
             />
 
 
-
+            {/* User Type */}
             <div className="mb-4">
+
               <select
                 className="form-control py-3"
-
                 value={userType}
-                onChange={(e) => { setUserType(e.target.value) }}
+                onChange={(e) => {
+                  setUserType(e.target.value);
+                  setSkills("");
+                  setResume("");
+                }}
               >
 
-                <option value="client">Client</option>
+                <option value="client">
+                  Client
+                </option>
 
-                <option value="freelancer">Freelancer</option>
-
+                <option value="freelancer">
+                  Freelancer
+                </option>
 
               </select>
+
             </div>
 
+
+            {/* Freelancer Fields */}
             {userType === "freelancer" && (
               <>
+
                 {/* Select Skill */}
                 <div className="mb-4">
-                  <label className="form-label">Select Skill</label>
+
+                  <label className="form-label">
+                    Select Skill
+                  </label>
+
                   <select
                     className="form-select py-3"
                     value={skills}
                     onChange={(e) => setSkills(e.target.value)}
                   >
-                    <option value="">Select Skill</option>
+
+                    <option value="">
+                      Select Skill
+                    </option>
 
                     {skillList.map((item) => (
-                      <option key={item.id} value={item.id}>
+                      <option
+                        key={item.id}
+                        value={item.id}
+                      >
                         {item.name}
                       </option>
                     ))}
+
                   </select>
+
                 </div>
+
 
                 {/* Upload Resume */}
                 <div className="mb-4">
+
                   <label className="form-label fw-semibold">
                     Upload Resume
                   </label>
@@ -223,28 +361,55 @@ export default function URegister() {
                     type="file"
                     className="form-control py-3"
                     accept=".pdf,.doc,.docx"
-                    onChange={(e) => setResume(e.target.files[0])}
+                    onChange={(e) => {
+                      setResume(e.target.files[0] || "");
+                    }}
                   />
 
                   <small className="text-muted">
                     Upload your resume in PDF, DOC or DOCX format.
                   </small>
+
                 </div>
+
               </>
             )}
 
 
+            {/* Submit Button */}
             <button
-              className="w-100 btn form-control border-secondary py-3 bg-white text-primary "
+              className="w-100 btn form-control border-secondary py-3 bg-white text-primary"
               type="submit"
+              disabled={loading}
             >
-              Submit
+
+              {loading ? "Please Wait..." : "Submit"}
+
             </button>
+
           </form>
+
           <ToastContainer />
+
         </div>
       </div>
+      {/* Registration Form End */}
 
 
-    </>)
+      {/* Login Link */}
+      <p className="text-center mt-3">
+
+        Already have an account?{" "}
+
+        <Link
+          to="/userlogin"
+          className="text-primary fw-bold text-decoration-none"
+        >
+          Login Here
+        </Link>
+
+      </p>
+
+    </>
+  );
 }

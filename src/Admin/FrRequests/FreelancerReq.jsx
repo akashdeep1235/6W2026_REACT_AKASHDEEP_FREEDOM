@@ -2,9 +2,9 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { RingLoader } from "react-spinners";
-import UserService from "../../../Services/UserService";
+import UserService from "../../Services/UserService";
 import { toast } from "react-toastify";
-import SkillService from "../../../Services/SkillService";
+import SkillService from "../../Services/SkillService";
 
 const override = {
   display: "block",

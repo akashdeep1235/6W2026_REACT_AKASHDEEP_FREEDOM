@@ -86,7 +86,7 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/skills" element={<Skills />} />
-            <Route path="/contact" element={<Contact />} />
+           
             <Route element={<ProtectedRoute allowedRoles={["client"]} />}>
               <Route path="/projects" element={<Projects />} />
               <Route path="/addproject" element={<AddProject />} />
@@ -95,8 +95,9 @@ export default function App() {
               <Route path="/work" element={<Work />} />
               <Route path="/chat/:id" element={<ChatPage />} />
               <Route path="/rate" element={<Rate />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="contact" element={<ContactPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/contact" element={<ContactPage />} />
+
 
 
 
@@ -106,9 +107,7 @@ export default function App() {
 
             <Route path="/rate" element={<Rate />} />
             <Route path="/rate/:id" element={<Rate />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="contact" element={<ContactPage />} />
-
+           
 
 
 
