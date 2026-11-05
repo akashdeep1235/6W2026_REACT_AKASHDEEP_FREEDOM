@@ -6,6 +6,7 @@ export default class UserModel{
     address=""
     profileImage= ""
     skills= ""
+    resumeUrl = ""
     userType= "admin/client/freelancer"// User Roles
     status=""
     createdAt=Date.now()

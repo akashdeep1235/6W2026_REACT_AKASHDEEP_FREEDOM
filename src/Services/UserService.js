@@ -25,6 +25,7 @@ class UserService {
     newUser.address = data.address
     newUser.profileImage = data.profileImage
     newUser.skills=data.skills
+    newUser.resumeUrl = data.resumeUrl || ""
 
 
 
