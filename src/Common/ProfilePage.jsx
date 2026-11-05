@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { RingLoader } from "react-spinners";
@@ -5,8 +6,13 @@ import { toast } from "react-toastify";
 import UserService from "../Services/UserService";
 import CloudinaryService from "../Services/CloudinaryService";
 import AuthService from "../Services/AuthService";
+import SkillService from "../Services/SkillService";
 
-const override = { display: "block", margin: "0 auto", borderColor: "red" };
+const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red"
+};
 
 export default function ProfilePage() {
     const uid = AuthService.getUid();
@@ -22,23 +28,34 @@ export default function ProfilePage() {
     const [contact, setContact] = useState("");
     const [address, setAddress] = useState("");
     const [skills, setSkills] = useState("");
-    const [imageFile, setImageFile] = useState(null);     // new picture chosen by the user
-    const [preview, setPreview] = useState("");           // what is shown in the circle
+
+    const [skillOptions, setSkillOptions] = useState([]);
+
+    const [imageFile, setImageFile] = useState(null);
+    const [preview, setPreview] = useState("");
 
     useEffect(() => {
         async function loadUser() {
             try {
                 const u = await UserService.getById(uid);
+
                 if (!u) {
                     toast.error("Profile not found");
                     return;
                 }
+
                 setUser(u);
                 setName(u.name || "");
                 setContact(u.contact || "");
                 setAddress(u.address || "");
                 setSkills(u.skills || "");
                 setPreview(u.profileImage || "");
+
+                if (isFreelancer) {
+                    const allSkills = await SkillService.all();
+                    setSkillOptions(allSkills);
+                }
+
             } catch (err) {
                 console.log(err);
                 toast.error("Could not load profile");
@@ -46,20 +63,25 @@ export default function ProfilePage() {
                 setLoading(false);
             }
         }
+
         loadUser();
-    }, []);
+    }, [uid, isFreelancer]);
 
     function handleImage(e) {
         const file = e.target.files[0];
+
         if (!file) return;
+
         if (!file.type.startsWith("image/")) {
             toast.error("Please choose an image file");
             return;
         }
+
         if (file.size > 2 * 1024 * 1024) {
             toast.error("Image must be smaller than 2 MB");
             return;
         }
+
         setImageFile(file);
         setPreview(URL.createObjectURL(file));
     }
@@ -71,12 +93,14 @@ export default function ProfilePage() {
             toast.error("Name, contact and address are required");
             return;
         }
+
         if (!/^\d{10}$/.test(contact.trim())) {
             toast.error("Contact number must be 10 digits");
             return;
         }
-        if (isFreelancer && !skills.trim()) {
-            toast.error("Please enter your skills");
+
+        if (isFreelancer && !skills) {
+            toast.error("Please select your skills");
             return;
         }
 
@@ -84,6 +108,7 @@ export default function ProfilePage() {
             setSaving(true);
 
             let imageUrl = user.profileImage || "";
+
             if (imageFile) {
                 imageUrl = await CloudinaryService.upload(imageFile);
             }
@@ -92,18 +117,31 @@ export default function ProfilePage() {
                 name: name.trim(),
                 contact: contact.trim(),
                 address: address.trim(),
-                skills: isFreelancer ? skills.trim() : "",
-                profileImage: imageUrl,
+                skills: isFreelancer ? skills : "",
+                profileImage: imageUrl
             });
 
-            // keep the name/image used by the rest of the app in sync
             localStorage.setItem("name", name.trim());
+            localStorage.setItem("contact", contact.trim());
             localStorage.setItem("address", address.trim());
-            if (imageUrl) localStorage.setItem("image", imageUrl);
 
-            setUser({ ...user, profileImage: imageUrl });
+            if (imageUrl) {
+                localStorage.setItem("image", imageUrl);
+            }
+
+            setUser({
+                ...user,
+                name: name.trim(),
+                contact: contact.trim(),
+                address: address.trim(),
+                skills: isFreelancer ? skills : "",
+                profileImage: imageUrl
+            });
+
             setImageFile(null);
+
             toast.success("Profile updated");
+
         } catch (err) {
             console.log(err);
             toast.error("Could not update profile");
@@ -117,11 +155,18 @@ export default function ProfilePage() {
             {/* Page Header Start */}
             <div className="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
                 <div className="container text-center py-5">
-                    <h1 className="display-3 text-white mb-4 animated slideInDown">Profile</h1>
+                    <h1 className="display-3 text-white mb-4 animated slideInDown">
+                        Profile
+                    </h1>
+
                     <nav aria-label="breadcrumb animated slideInDown">
                         <ol className="breadcrumb justify-content-center mb-0">
-                            <li className="breadcrumb-item"><Link to={homeLink}>Home</Link></li>
-                            <li className="breadcrumb-item active" aria-current="page">Profile</li>
+                            <li className="breadcrumb-item">
+                                <Link to={homeLink}>Home</Link>
+                            </li>
+                            <li className="breadcrumb-item active" aria-current="page">
+                                Profile
+                            </li>
                         </ol>
                     </nav>
                 </div>
@@ -129,7 +174,12 @@ export default function ProfilePage() {
             {/* Page Header End */}
 
             {loading ? (
-                <RingLoader color="#81C408" loading={loading} cssOverride={override} size={75} />
+                <RingLoader
+                    color="#81C408"
+                    loading={loading}
+                    cssOverride={override}
+                    size={75}
+                />
             ) : (
                 user && (
                     <div className="container mb-5" style={{ maxWidth: 700 }}>
@@ -142,71 +192,148 @@ export default function ProfilePage() {
                                         src={preview}
                                         alt="Profile"
                                         className="rounded-circle border mb-3"
-                                        style={{ width: 120, height: 120, objectFit: "cover" }}
+                                        style={{
+                                            width: 120,
+                                            height: 120,
+                                            objectFit: "cover"
+                                        }}
                                     />
                                 ) : (
                                     <div
                                         className="rounded-circle border mb-3 d-inline-flex align-items-center justify-content-center bg-light"
-                                        style={{ width: 120, height: 120, fontSize: 48, color: "#81C408" }}
+                                        style={{
+                                            width: 120,
+                                            height: 120,
+                                            fontSize: 48,
+                                            color: "#81C408"
+                                        }}
                                     >
                                         {(name || "?").charAt(0).toUpperCase()}
                                     </div>
                                 )}
+
                                 <div>
-                                    <span className="badge bg-success me-2 text-capitalize">{user.userType}</span>
-                                    <span className="badge bg-secondary text-capitalize">{user.status}</span>
+                                    <span className="badge bg-success me-2 text-capitalize">
+                                        {user.userType}
+                                    </span>
+
+                                    <span className="badge bg-secondary text-capitalize">
+                                        {user.status}
+                                    </span>
                                 </div>
                             </div>
 
                             <form onSubmit={handleSave}>
+
                                 <div className="mb-3">
-                                    <label className="form-label">Profile picture</label>
-                                    <input type="file" accept="image/*" className="form-control" onChange={handleImage} />
+                                    <label className="form-label">
+                                        Profile picture
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="form-control"
+                                        onChange={handleImage}
+                                    />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Email</label>
-                                    <input type="email" className="form-control" value={user.email || ""} disabled />
-                                    <small className="text-muted">Email cannot be changed</small>
+
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        value={user.email || ""}
+                                        disabled
+                                    />
+
+                                    <small className="text-muted">
+                                        Email cannot be changed
+                                    </small>
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Name</label>
-                                    <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Contact number</label>
+                                    <label className="form-label">
+                                        Contact number
+                                    </label>
+
                                     <input
                                         type="text"
                                         className="form-control"
                                         value={contact}
                                         maxLength={10}
-                                        onChange={(e) => setContact(e.target.value.replace(/\D/g, ""))}
+                                        onChange={(e) =>
+                                            setContact(e.target.value.replace(/\D/g, ""))
+                                        }
                                     />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Address</label>
-                                    <textarea className="form-control" rows={2} value={address} onChange={(e) => setAddress(e.target.value)} />
+
+                                    <textarea
+                                        className="form-control"
+                                        rows={2}
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                    />
                                 </div>
 
                                 {isFreelancer && (
                                     <div className="mb-3">
                                         <label className="form-label">Skills</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="e.g. React, Node.js, UI design"
+
+                                        <select
+                                            className="form-select"
                                             value={skills}
                                             onChange={(e) => setSkills(e.target.value)}
-                                        />
+                                            required
+                                        >
+                                            <option value="">
+                                                Select Skill
+                                            </option>
+
+                                            {skills &&
+                                                !skillOptions.some(
+                                                    (skill) => skill.id === skills
+                                                ) && (
+                                                    <option value={skills}>
+                                                        Previously saved skill not found
+                                                    </option>
+                                                )}
+
+                                            {skillOptions.map((skill) => (
+                                                <option
+                                                    key={skill.id}
+                                                    value={skill.id}
+                                                >
+                                                    {skill.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                 )}
 
-                                <button type="submit" className="btn btn-primary" disabled={saving}>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    disabled={saving}
+                                >
                                     {saving ? "Saving..." : "Save Changes"}
                                 </button>
+
                             </form>
                         </div>
                     </div>
