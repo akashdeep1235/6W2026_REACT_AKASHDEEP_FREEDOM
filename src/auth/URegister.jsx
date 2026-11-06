@@ -43,16 +43,41 @@ export default function URegister() {
       toast.error("Please fill all the details");
       return;
     }
+    // Name validation
+    if (!/^[A-Za-z ]+$/.test(name.trim())) {
+      toast.error("Name must contain only letters");
+      return;
+    }
 
     // Contact validation
-    if (contact.length !== 10) {
-      toast.error("Contact number must contain 10 digits");
+    if (!/^[6-9]\d{9}$/.test(contact)) {
+      toast.error("Enter a valid 10-digit mobile number");
       return;
     }
 
     // Password validation
-    if (password.length < 6) {
-      toast.error("Password must contain at least 6 characters");
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      toast.error("Password must contain at least one uppercase letter");
+      return;
+    }
+
+    if (!/[a-z]/.test(password)) {
+      toast.error("Password must contain at least one lowercase letter");
+      return;
+    }
+
+    if (!/[0-9]/.test(password)) {
+      toast.error("Password must contain at least one number");
+      return;
+    }
+
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      toast.error("Password must contain at least one special character");
       return;
     }
 
@@ -238,9 +263,10 @@ export default function URegister() {
             <input
               type="text"
               className="w-100 form-control border-0 py-3 mb-4"
-              placeholder="Enter name"
+              placeholder="Enter Name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.replace(/[^A-Za-z ]/g, ""))}
+              autoComplete="name"
             />
 
 
@@ -261,6 +287,7 @@ export default function URegister() {
               placeholder="Enter Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
             />
 
 
